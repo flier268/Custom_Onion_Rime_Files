@@ -102,7 +102,7 @@ key_binder:
 ### 上屏 preedit（注音文）編碼 ###
     - {accept: Shift+F, send: Control+Return, when: has_menu}
 ### 刪除鍵 ###
-    - {accept: BackSpace, send: Control+BackSpace, when: has_menu} #〔關〕刪除前一個拼音字符〔開〕：刪除整組拼音字符（一個字）
+#    - {accept: BackSpace, send: Control+BackSpace, when: has_menu} #〔關〕刪除前一個拼音字符〔開〕：刪除整組拼音字符（一個字）
     - {accept: Shift+BackSpace, send: BackSpace, when: has_menu}
     - {accept: backslash, send: BackSpace, when: has_menu} #「\」鍵位刪除一個拼音字符。
     # - {accept: backslash, send: Shift+BackSpace, when: has_menu} #「\」鍵位刪除整組拼音字符（一個字）。
