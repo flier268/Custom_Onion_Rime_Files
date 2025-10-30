@@ -1,0 +1,387 @@
+name: Sync from Upstream and Build
+
+# 自動從上游同步更新並打包
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 每天 UTC 00:00 執行
+  workflow_dispatch:
+    inputs:
+      force_build:
+        description: '強制打包並發布（即使沒有更新）'
+        required: false
+        type: boolean
+        default: false
+
+env:
+  UPSTREAM_REPO: oniondelta/Onion_Rime_Files
+  UPSTREAM_BRANCH: main
+  PYTHON_VERSION: '3.x'
+
+jobs:
+  sync-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Sync with upstream
+        id: sync
+        run: |
+          set -euo pipefail
+
+          # 添加上游遠端
+          git remote add upstream https://github.com/${{ env.UPSTREAM_REPO }}.git 2>/dev/null || true
+          git fetch upstream
+
+          # 嘗試合併
+          BEFORE_SHA=$(git rev-parse HEAD)
+
+          if git merge upstream/${{ env.UPSTREAM_BRANCH }} --no-edit; then
+            AFTER_SHA=$(git rev-parse HEAD)
+
+            if [ "$BEFORE_SHA" = "$AFTER_SHA" ]; then
+              echo "has_updates=false" >> $GITHUB_OUTPUT
+              echo "::notice::Already up to date with upstream"
+            else
+              echo "has_updates=true" >> $GITHUB_OUTPUT
+              echo "::notice::Successfully merged $(git log --oneline $BEFORE_SHA..$AFTER_SHA | wc -l) commits"
+            fi
+
+            echo "merge_success=true" >> $GITHUB_OUTPUT
+          else
+            echo "merge_success=false" >> $GITHUB_OUTPUT
+            echo "::error::Merge conflict detected"
+            git merge --abort
+            exit 1
+          fi
+
+      - name: Push changes
+        if: steps.sync.outputs.has_updates == 'true'
+        run: git push origin ${{ github.ref_name }}
+
+      - name: Determine if build needed
+        id: check_build
+        run: |
+          FORCE_BUILD="${{ github.event.inputs.force_build }}"
+          HAS_UPDATES="${{ steps.sync.outputs.has_updates }}"
+
+          if [ "$HAS_UPDATES" = "true" ] || [ "$FORCE_BUILD" = "true" ]; then
+            echo "should_build=true" >> $GITHUB_OUTPUT
+            echo "::notice::Build will be triggered"
+          else
+            echo "should_build=false" >> $GITHUB_OUTPUT
+            echo "::notice::No build needed"
+          fi
+
+      - name: Run packaging script
+        if: steps.check_build.outputs.should_build == 'true'
+        id: package
+        run: |
+          set -euo pipefail
+
+          echo "::group::Running sort_rime_file.py"
+          python sort_rime_file.py
+          echo "::endgroup::"
+
+          # 查找生成的資料夾
+          PACKAGE_DIR=$(find . -maxdepth 1 -type d -name "電腦RIME方案_*" | head -1)
+
+          if [ -z "$PACKAGE_DIR" ]; then
+            echo "::error::Package directory not found"
+            exit 1
+          fi
+
+          PACKAGE_DIR=$(basename "$PACKAGE_DIR")
+          VERSION=$(echo "$PACKAGE_DIR" | sed 's/電腦RIME方案_//')
+
+          echo "package_dir=$PACKAGE_DIR" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "version_tag=v$VERSION" >> $GITHUB_OUTPUT
+
+          echo "::notice::Package created: $PACKAGE_DIR"
+
+      - name: Create release archives
+        if: steps.check_build.outputs.should_build == 'true'
+        run: |
+          set -euo pipefail
+
+          PACKAGE_DIR="${{ steps.package.outputs.package_dir }}"
+          VERSION="${{ steps.package.outputs.version }}"
+          RELEASES_DIR="releases"
+
+          mkdir -p "$RELEASES_DIR"
+
+          # 獲取 releases 目錄的絕對路徑
+          RELEASES_DIR_ABS="$(pwd)/$RELEASES_DIR"
+
+          # 中文到英文的映射函數
+          translate_name() {
+            local chinese_name="$1"
+            case "$chinese_name" in
+              注音洋蔥純注音版_*)
+                echo "Bopomofo_Onion_Pure_${chinese_name##*_}"
+                ;;
+              注音洋蔥plus版_*)
+                echo "Bopomofo_Onion_Plus_${chinese_name##*_}"
+                ;;
+              注音洋蔥mixin版_*)
+                echo "Bopomofo_Onion_Mixin_${chinese_name##*_}"
+                ;;
+              注音洋蔥mixin版2_*)
+                echo "Bopomofo_Onion_Mixin2_${chinese_name##*_}"
+                ;;
+              注音洋蔥mixin版3_*)
+                echo "Bopomofo_Onion_Mixin3_${chinese_name##*_}"
+                ;;
+              注音洋蔥mixin版4_*)
+                echo "Bopomofo_Onion_Mixin4_${chinese_name##*_}"
+                ;;
+              注音洋蔥雙拼版_*)
+                echo "Bopomofo_Onion_Shuangpin_${chinese_name##*_}"
+                ;;
+              地球拼音洋蔥mix-in版_*)
+                echo "Terra_Pinyin_Onion_Mixin_${chinese_name##*_}"
+                ;;
+              拼音洋蔥mixin版_*)
+                echo "Pinyin_Onion_Mixin_${chinese_name##*_}"
+                ;;
+              洋蔥行列30_*)
+                echo "Onion_Array30_${chinese_name##*_}"
+                ;;
+              洋蔥行列30簡化版_*)
+                echo "Onion_Array30_Simplified_${chinese_name##*_}"
+                ;;
+              洋蔥行列10_*)
+                echo "Onion_Array10_${chinese_name##*_}"
+                ;;
+              洋蔥行列10簡化版_*)
+                echo "Onion_Array10_Simplified_${chinese_name##*_}"
+                ;;
+              洋蔥OCM_mixin_*)
+                echo "Onion_OCM_Mixin_${chinese_name##*_}"
+                ;;
+              洋蔥OCM_*)
+                echo "Onion_OCM_${chinese_name##*_}"
+                ;;
+              ocm_*)
+                echo "OCM_${chinese_name##*_}"
+                ;;
+              其他)
+                echo "Others"
+                ;;
+              *)
+                # 如果沒有匹配，保留原名
+                echo "$chinese_name"
+                ;;
+            esac
+          }
+
+          echo "::group::Creating ZIP archives"
+
+          # 創建映射文件記錄中英文對應關係
+          > "$RELEASES_DIR_ABS/filename_mapping.txt"
+
+          cd "$PACKAGE_DIR"
+
+          for schema_dir in */; do
+            schema_name="${schema_dir%/}"
+
+            # 生成英文檔名
+            english_name=$(translate_name "$schema_name")
+            archive_name="${english_name}.zip"
+
+            echo "Compressing: $schema_name -> $archive_name"
+            (cd "$schema_name" && zip -rq9 "$RELEASES_DIR_ABS/$archive_name" .)
+
+            # 記錄映射關係
+            echo "$archive_name -> $schema_name" >> "$RELEASES_DIR_ABS/filename_mapping.txt"
+          done
+
+          cd ..
+          echo "::endgroup::"
+
+          echo "::group::Created archives"
+          ls -lh "$RELEASES_DIR/"
+          echo "::endgroup::"
+
+          echo "::group::Filename mappings"
+          cat "$RELEASES_DIR/filename_mapping.txt"
+          echo "::endgroup::"
+
+      - name: Create and Upload Release
+        if: steps.check_build.outputs.should_build == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          
+          VERSION="${{ steps.package.outputs.version }}"
+          REPO="${{ github.repository }}"
+          
+          echo "準備建立 Release: v$VERSION"
+          
+          # 建立 release
+          gh release create "v$VERSION" \
+            --repo "$REPO" \
+            --title "Onion Rime 方案 $VERSION" \
+            --notes "## 📦 自動打包發布
+          
+          此版本從上游倉庫 [oniondelta/Onion_Rime_Files](https://github.com/oniondelta/Onion_Rime_Files) 自動同步並打包。
+
+          ### 📥 下載說明
+
+          請根據您使用的輸入法下載對應的 ZIP 檔案:
+          - **注音洋蔥純注音版**: \`Bopomofo_Onion_Pure_*.zip\`
+          - **注音洋蔥 Plus 版**: \`Bopomofo_Onion_Plus_*.zip\`
+          - **注音洋蔥 Mixin 版**: \`Bopomofo_Onion_Mixin*.zip\`
+          - **注音洋蔥雙拼版**: \`Bopomofo_Onion_Shuangpin_*.zip\`
+          - **拼音洋蔥 Mixin 版**: \`Pinyin_Onion_Mixin_*.zip\`
+          - **洋蔥行列30**: \`Onion_Array30*.zip\`
+          - **洋蔥行列10**: \`Onion_Array10*.zip\`
+          - **洋蔥OCM**: \`Onion_OCM*.zip\`
+
+          > **注意**: 檔案標籤會顯示中文方案名稱，實際下載的檔案名稱為英文。
+          
+          ### 🔧 安裝方法
+          
+          1. 下載對應的 ZIP 檔案
+          2. 解壓縮到 Rime 用戶資料夾:
+            - **Linux (fcitx5)**: \`~/.local/share/fcitx5/rime/\`
+            - **Linux (ibus)**: \`~/.config/ibus/rime/\`
+            - **macOS (Squirrel)**: \`~/Library/Rime/\`
+            - **Windows (Weasel)**: \`%APPDATA%\Rime\`
+          3. 重新部署 Rime
+          
+          ### ⚠️ 注意事項
+          
+          - 請勿覆蓋整個 \`opencc/\` 資料夾,僅合併內部檔案
+          - 需要 librime ≥1.11.2 及 librime-lua ≥#200
+          
+          ---
+          
+          **同步時間**: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          **Workflow Run**: [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+          
+          echo "開始上傳檔案..."
+
+          # 讀取映射文件並上傳 zip 檔案
+          while IFS= read -r line; do
+            # 使用 -> 分割英文檔名和中文名稱
+            english_filename="${line%% -> *}"
+            chinese_filename="${line##* -> }"
+
+            file="releases/$english_filename"
+            if [ -f "$file" ]; then
+              # 使用英文檔名作為實際檔案，中文名稱作為顯示標籤
+              echo "上傳: $english_filename (顯示為: $chinese_filename)"
+              gh release upload "v$VERSION" "$file#$chinese_filename" --repo "$REPO" --clobber
+            fi
+          done < releases/filename_mapping.txt
+
+          echo "✅ Release 建立完成!"
+
+      - name: Create issue on failure
+        if: failure() && steps.sync.outputs.merge_success == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '⚠️ 上游同步失敗：發現合併衝突',
+              body: `## 問題描述
+
+            自動同步上游 \`${{ env.UPSTREAM_REPO }}\` 時發生合併衝突。
+
+            ## 詳細資訊
+
+            - **Workflow Run**: [#${context.runNumber}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})
+            - **分支**: \`${context.ref}\`
+            - **觸發時間**: ${new Date().toISOString()}
+            - **觸發方式**: \`${context.eventName}\`
+
+            ## 手動修復步驟
+
+            \`\`\`bash
+            # 1. 添加上游遠端
+            git remote add upstream https://github.com/${{ env.UPSTREAM_REPO }}.git
+
+            # 2. 拉取上游更新
+            git fetch upstream
+
+            # 3. 嘗試合併
+            git merge upstream/${{ env.UPSTREAM_BRANCH }}
+
+            # 4. 解決衝突後
+            git add .
+            git commit -m "Merge upstream changes"
+
+            # 5. 推送更新
+            git push origin ${{ env.UPSTREAM_BRANCH }}
+            \`\`\`
+
+            ## 相關資源
+
+            - [上游倉庫](https://github.com/${{ env.UPSTREAM_REPO }})
+            - [Git 衝突解決指南](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-using-the-command-line)
+
+            ---
+
+            _此 issue 由 GitHub Actions 自動建立_`,
+              labels: ['sync', 'conflict', 'automated']
+            });
+
+            core.notice(\`Created issue: \${issue.data.html_url}\`);
+
+      - name: Workflow summary
+        if: always()
+        run: |
+          {
+            echo "## 工作流程摘要"
+            echo ""
+            echo "### 基本資訊"
+            echo "- **觸發方式**: ${{ github.event_name }}"
+            echo "- **分支**: ${{ github.ref_name }}"
+            echo "- **執行時間**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+            echo ""
+
+            if [ "${{ steps.sync.outputs.merge_success }}" = "true" ]; then
+              echo "### ✅ 同步狀態"
+              if [ "${{ steps.sync.outputs.has_updates }}" = "true" ]; then
+                echo "- 成功合併上游更新"
+              else
+                echo "- 已是最新版本"
+              fi
+            else
+              echo "### ❌ 同步狀態"
+              echo "- 合併失敗，請查看上方錯誤"
+            fi
+            echo ""
+
+            if [ "${{ steps.check_build.outputs.should_build }}" = "true" ]; then
+              echo "### 📦 Release 資訊"
+              echo "- **版本**: ${{ steps.package.outputs.version }}"
+              echo "- **標籤**: ${{ steps.package.outputs.version_tag }}"
+              echo "- **Release 名稱**: Onion Rime 方案 ${{ steps.package.outputs.version }}"
+              echo ""
+              echo "💡 下載 Release："
+              echo "[查看 Release 頁面](${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ steps.package.outputs.version_tag }})"
+            fi
+          } >> $GITHUB_STEP_SUMMARY
