@@ -5,7 +5,7 @@
 schema:
   schema_id: onion-array10
   name: "▦ 行列１０（洋蔥版）"
-  version: "202508"
+  version: "202512"
   author:
     - 洋蔥
   description: |
@@ -75,6 +75,7 @@ engine:
     - affix_segmentor@shadow_top
     # - affix_segmentor@second_phrases  # 不標註直接掛在「abc」下，附註可掛接到其他「translator」下。
     - affix_segmentor@reverse2_lookup
+    # - lua_segmentor@mount_zhuyin  -- 不要如其他方案改 segmentor 處理，如此小鍵盤位操作需要重新增修。
     - affix_segmentor@reverse3_lookup
     - punct_segmentor
     - fallback_segmentor
@@ -576,7 +577,9 @@ recognizer:
   patterns:
     punct: "(?<!`)``$"  #"(?<!`)``$|```"$
     shadow_top: "```[zxcvsdfwerb]*$"
-    reverse2_lookup: "(?<!`)`[-.,;/0-9a-z ]*'?$"
+    reverse2_lookup: "(?<!`)`[-.,;/0-9a-z ]*'?$"  # 去除開頭「^」限定，使其接續不跳掉。（舊的lua寫法需這樣設定！）
+    # reverse2_lookup: "`[^`][-.,;/0-9a-z ]*'?$"  #可替代上條列，可接續調出，但開頭無《注音反查》▶提示。
+    # reverse2_lookup: "^`[-.,;/0-9a-z ]*'?$"
     reverse3_lookup: "(?<!`)``[zxcvsdfwerb]*'?$"
 
 

@@ -5,7 +5,7 @@
 schema:
   schema_id: Mount_ocm
   name: "❖蝦米(單出-反查專用)❖"
-  version: "202508"
+  version: "202512"
   author:
     - 洋蔥
   description: |
@@ -61,6 +61,7 @@ engine:
     - affix_segmentor@pt
     - affix_segmentor@emoji_series
     - affix_segmentor@reverse2_lookup
+    # - lua_segmentor@mount_zhuyin
     - affix_segmentor@reverse3_lookup
     # - affix_segmentor@reverse3_lookup_extra
     - punct_segmentor
@@ -410,5 +411,6 @@ recognizer:
     pt: "^[,.][,.'a-z]*$|^'['a-z]*$|^,[][]+[a-z]*$|^,v[][]+$|^v[][]+v?$|^[][]+[a-z]*$"
     emoji_series: "^;$|^;[a-z]+'?$|^;;[-0-9a-z]'?$|^;[0-9]'?$|^;[0-9]-[0-9]?'?$"
     # emoji_series: "^;[a-z]*$|^;;[-0-9a-z]$|^;[0-9]$|^;[0-9]-[0-9]?$"
-    reverse2_lookup: "';[-.,;/0-9a-z |]*'?$"  # 去除開頭「^」限定，使其接續不跳掉。
+    reverse2_lookup: "';[-.,;/0-9a-z |]*'?$"  # 去除開頭「^」限定，使其接續不跳掉。（舊的lua寫法需這樣設定！）
+    # reverse2_lookup: "^';[-.,;/0-9a-z |]*'?$"
     reverse3_lookup: "^;'[a-z`|]*'?$"
