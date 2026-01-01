@@ -26,9 +26,9 @@ patch:
 
   switcher/fix_schema_list_order: true #固定方案選單順序
   # 已清理快捷鍵，避免與IDE衝突
-  # switcher/hotkeys:
+  switcher/hotkeys:
   #   - Control+grave
-  #   - Control+Shift+grave
+    - Control+Shift+grave
   #   - F4
 
   key_binder/bindings:
