@@ -290,6 +290,7 @@ local function translate(input, seg, env)
   -- local caret_pos = context.caret_pos or 0
 
 -----------------------------
+-----------------------------
 
   --- 跳掉不符合該 translate 時機用
   local tag_mf = seg:has_tag("mf_translator")
@@ -445,6 +446,7 @@ local function translate(input, seg, env)
     return
   end
 
+
   -- lua 所佔垃圾/記憶體(Garbage)
   if (input == env.prefix .. "g") then
     local preedittext = input .. "\t 【Lua 所佔記憶體】(Garbage)"
@@ -468,6 +470,7 @@ local function translate(input, seg, env)
     -- yield_c( collectgarbage("count")*1024, "〔 the amount of lua memory after GC 〕")
     return
   end
+
 
   -- lua 程式原生時間
   if (input == env.prefix .. "p") then
@@ -512,543 +515,120 @@ local function translate(input, seg, env)
 -----------------------------
 -----------------------------
 
-  local y, m, d, d_suffix = string.match(input, env.prefix_s .. "(%d+)y(%d?%d)m(%d?%d)(d?)$")
-  -- if not y then y, m, d = string.match(input, env.prefix .. "y(%d+)m(%d?%d)d(%d?%d)$") end
-  if y and tonumber(m)<13 and tonumber(d)<32 then
-    local preedittext = env.prefix .. " " .. y .. "Y " .. m .. "M " .. d .. string.upper(d_suffix) .. "\t 【自訂日期：○年○月○日】"
-    yield_c( y.."年"..m.."月"..d.."日", "〔日期〕", preedittext)
-    yield_c( " "..y.." 年 "..m.." 月 "..d.." 日 ", "〔*日期*〕", preedittext)
-    yield_c( fullshape_number(y).."年"..fullshape_number(m).."月"..fullshape_number(d).."日", "〔全形〕", preedittext)
-    yield_c( ch_y_date(y).."年"..ch_m_date(m).."月"..ch_d_date(d).."日", "〔小寫中文〕", preedittext)
-    yield_c( chb_y_date(y).."年"..chb_m_date(m).."月"..chb_d_date(d).."日", "〔大寫中文〕", preedittext)
-    if (tonumber(y) > 1911) then
-      yield_c( "民國"..min_guo(y).."年"..m.."月"..d.."日", "〔民國〕", preedittext)
-      yield_c( "民國"..purech_number(min_guo(y)).."年"..ch_m_date(m).."月"..ch_d_date(d).."日", "〔民國〕", preedittext)
-      yield_c( "民國"..read_number(confs[1], min_guo(y)).."年"..ch_m_date(m).."月"..ch_d_date(d).."日", "〔民國〕", preedittext)
-    elseif (tonumber(y) <= 1911) then
-      yield_c( "民國前"..min_guo(y).."年"..m.."月"..d.."日", "〔民國〕", preedittext)
-      yield_c( "民國前"..purech_number(min_guo(y)).."年"..ch_m_date(m).."月"..ch_d_date(d).."日", "〔民國〕", preedittext)
-      yield_c( "民國前"..read_number(confs[1], min_guo(y)).."年"..ch_m_date(m).."月"..ch_d_date(d).."日", "〔民國〕", preedittext)
-    end
-    -- yield_c( y.."年 "..jp_m_date(m)..jp_d_date(d), "〔日文日期〕", preedittext)
-    local jpymd2, jp_y2 = jp_ymd(y,m,d)
-    yield_c( jp_y2..m.."月"..d.."日" , "〔日本元号〕", preedittext)
-    yield_c( eng1_m_date(m).." "..eng2_d_date(d)..", "..y, "〔英文美式〕", preedittext)
-    yield_c( eng1_m_date(m).." "..eng3_d_date(d)..", "..y, "〔英文美式〕", preedittext)
-    yield_c( eng2_m_date(m).." "..eng3_d_date(d)..", "..y, "〔英文美式〕", preedittext)
-    yield_c( eng3_m_date(m).." "..eng4_d_date(d).." "..y, "〔英文美式〕", preedittext)
-    yield_c( eng1_m_date(m).." the "..eng1_d_date(d)..", "..y, "〔英文美式〕", preedittext)
-    yield_c( eng2_d_date(d).." "..eng1_m_date(m).." "..y, "〔英文英式〕", preedittext)
-    yield_c( eng3_d_date(d).." "..eng1_m_date(m).." "..y, "〔英文英式〕", preedittext)
-    yield_c( eng2_d_date(d).." "..eng2_m_date(m).." "..y, "〔英文英式〕", preedittext)
-    yield_c( "the "..eng1_d_date(d).." of "..eng1_m_date(m)..", "..y, "〔英文英式〕", preedittext)
-    yield_c( "The "..eng1_d_date(d).." of "..eng1_m_date(m)..", "..y, "〔英文英式〕", preedittext)
-    if tonumber(y) > 1899 and tonumber(y) < 2101 then
-      -- local chinese_date_input = to_chinese_cal_local(os.time({year = y, month = m, day = d, hour = 12}))
-      local ll_1b, ll_2b = Date2LunarDate(y .. string.format("%02d", m) .. string.format("%02d", d))
-      -- if (Date2LunarDate~=nil) then
-      if ll_1b~=nil and ll_2b~=nil then
-        yield_c( ll_1b, "〔西曆→農曆〕", preedittext)
-        yield_c( ll_2b, "〔西曆→農曆〕", preedittext)
-      end
-    end
-    if tonumber(y) > 1901 and tonumber(y) < 2101 then
-      local All_g2, Y_g2, M_g2, D_g2 = lunarJzl(y .. string.format("%02d", m) .. string.format("%02d", d) .. 12)
-      if (All_g2~=nil) then
-        yield_c( Y_g2.."年"..M_g2.."月"..D_g2.."日", "〔西曆→農曆干支〕", preedittext)
-      end
-      local LDD2D = LunarDate2Date(y .. string.format("%02d", m) .. string.format("%02d", d), 0 )
-      local LDD2D_leap_year  = LunarDate2Date(y .. string.format("%02d", m) .. string.format("%02d", d), 1 )
-      -- if (Date2LunarDate~=nil) then
-      if (LDD2D~=nil) then
-        yield_c( LDD2D, "〔農曆→西曆〕", preedittext)
-        yield_c( LDD2D_leap_year, "〔農曆(閏)→西曆〕", preedittext)
-      end
-      -- local chinese_date_input2 = to_chinese_cal(y, m, d)
-      -- if (chinese_date_input2~=nil) then
-      --   yield_c( chinese_date_input2 .. " ", "〔農曆，可能有誤！〕", preedittext)
-      -- end
-    end
-    return
+  --- Lua 字符類依賴於本地環境，故'[a-z]'可能與'%l'表示的字符集不同。一般情況下，後者包括'ç'和'ã'，前者沒有。
+  --- 承上，盡量使用後者來表示字母，除非出於特殊考慮，因後者更簡單、方便、高效。
+  --- goto 和 ::Label:: 之後不要接變數，例：local abc = xxx，易產生錯誤！
+  local op_check = string.match(input, env.prefix_s .. "j(%l*)$")
+  ---
+  local k_key = string.match(input, env.prefix_s .. "k%l?$")
+  ---
+  local t_key = string.match(input, env.prefix_s .. "t%l?$")
+  local n_key = string.match(input, env.prefix_s .. "n%l?$")
+  local d_key = string.match(input, env.prefix_s .. "d%l?$")
+  local w_key = string.match(input, env.prefix_s .. "w%l?$")
+  local y_key = string.match(input, env.prefix_s .. "y%l*$")
+  local m_key = string.match(input, env.prefix_s .. "m%l*$")
+  local fh_key = string.match(input, env.prefix_s .. "[fh]%l*$")
+  ---
+  local englishout1 = string.match(input, env.prefix_s .. "/([%l.,/'-]+)$")
+  local englishout2 = string.match(input, env.prefix_s .. "\'([%l.,/'-]+)$")
+  local englishout3 = string.match(input, env.prefix_s .. ";([%l.,/'-]+)$")
+  ---
+  local utf_input = string.match(input, env.prefix_s .. "([xuco][a-f%d]+)$")
+  local urlencode_input = string.match(input, env.prefix_s .. "i([%l%d][a-f%d]*)$")
+  ---
+  local xy = string.match(input, env.prefix_s .. "(%d+)y$")
+  local xm = string.match(input, env.prefix_s .. "(%d%d?)m$")
+  local xd = string.match(input, env.prefix_s .. "(%d%d?)d$")
+  -- local y, m, m_suffix = string.match(input, env.prefix_s .. "(%d+)y(%d%d?)(m?)$")
+  -- local y, m, d, d_suffix = string.match(input, env.prefix_s .. "(%d+)y(%d%d?)m(%d%d?)(d?)$")
+  if string.match(input, env.prefix_s .. "%d+y1[3-9]") then
+    y, m, m_suffix, d, d_suffix = string.match(input, env.prefix_s .. "(%d+)y(1)(m?)(%d?%d?)(d?)$")
+  else
+    y, m, m_suffix, d, d_suffix = string.match(input, env.prefix_s .. "(%d+)y([01]?%d)(m?)(%d?%d?)(d?)$")
   end
-
-  local m, d, d_suffix = string.match(input, env.prefix_s .. "(%d?%d)m(%d?%d)(d?)$")
-  -- if not m then m, d =  string.match(input, env.prefix .. "m(%d?%d)d(%d?%d)$") end
-  if m and tonumber(m)<13 and tonumber(d)<32 then
-    local preedittext = env.prefix .. " " .. m .. "M " .. d .. string.upper(d_suffix) .. "\t 【自訂日期：○月○日】"
-    yield_c( m.."月"..d.."日" , "〔日期〕", preedittext)
-    yield_c( " "..m.." 月 "..d.." 日 " , "〔*日期*〕", preedittext)
-    yield_c( fullshape_number(m).."月"..fullshape_number(d).."日" , "〔全形〕", preedittext)
-    yield_c( ch_m_date(m).."月"..ch_d_date(d).."日" , "〔小寫中文〕", preedittext)
-    yield_c( chb_m_date(m).."月"..chb_d_date(d).."日" , "〔大寫中文〕", preedittext)
-    yield_c( jp_m_date(m)..jp_d_date(d), "〔日文〕", preedittext)
-    yield_c( eng1_m_date(m).." "..eng2_d_date(d), "〔英文美式〕", preedittext)
-    yield_c( eng1_m_date(m).." "..eng3_d_date(d), "〔英文美式〕", preedittext)
-    yield_c( eng2_m_date(m).." "..eng3_d_date(d), "〔英文美式〕", preedittext)
-    yield_c( eng3_m_date(m).." "..eng4_d_date(d), "〔英文美式〕", preedittext)
-    yield_c( eng1_m_date(m).." the "..eng1_d_date(d), "〔英文美式〕", preedittext)
-    yield_c( eng2_d_date(d).." "..eng1_m_date(m), "〔英文英式〕", preedittext)
-    yield_c( eng3_d_date(d).." "..eng1_m_date(m), "〔英文英式〕", preedittext)
-    yield_c( eng2_d_date(d).." "..eng2_m_date(m), "〔英文英式〕", preedittext)
-    yield_c( "the "..eng1_d_date(d).." of "..eng1_m_date(m), "〔英文英式〕", preedittext)
-    yield_c( "The "..eng1_d_date(d).." of "..eng1_m_date(m), "〔英文英式〕", preedittext)
-    return
-  end
-
-  local y, m, m_suffix = string.match(input, env.prefix_s .. "(%d+)y(%d?%d)(m?)$")
-  -- if not y then y, m = string.match(input, env.prefix .. "y(%d+)m(%d?%d)$") end
-  if y and tonumber(m)<13 then
-    local preedittext = env.prefix .. " " .. y .. "Y " .. m .. string.upper(m_suffix) .. "\t 【自訂日期：○年○月】"
-    yield_c( y.."年"..m.."月" , "〔日期〕", preedittext)
-    yield_c( " "..y.." 年 "..m.." 月 " , "〔*日期*〕", preedittext)
-    yield_c( fullshape_number(y).."年"..fullshape_number(m).."月" , "〔全形〕", preedittext)
-    yield_c( ch_y_date(y).."年"..ch_m_date(m).."月" , "〔小寫中文〕", preedittext)
-    yield_c( chb_y_date(y).."年"..chb_m_date(m).."月" , "〔大寫中文〕", preedittext)
-    if (tonumber(y) > 1911) then
-      yield_c( "民國"..min_guo(y).."年"..m.."月" , "〔民國〕", preedittext)
-      yield_c( "民國"..purech_number(min_guo(y)).."年"..ch_m_date(m).."月" , "〔民國〕", preedittext)
-      yield_c( "民國"..read_number(confs[1], min_guo(y)).."年"..ch_m_date(m).."月" , "〔民國〕", preedittext)
-    elseif (tonumber(y) <= 1911) then
-      yield_c( "民國前"..min_guo(y).."年"..m.."月" , "〔民國〕", preedittext)
-      yield_c( "民國前"..purech_number(min_guo(y)).."年"..ch_m_date(m).."月" , "〔民國〕", preedittext)
-      yield_c( "民國前"..read_number(confs[1], min_guo(y)).."年"..ch_m_date(m).."月" , "〔民國〕", preedittext)
-    end
-    -- yield_c( y.."年 "..jp_m_date(m), "〔日文日期〕", preedittext)
-    -- local jpymd2, jp_y2 = jp_ymd(y,m,"1")
-    -- yield_c( jp_y2..m.."月" , "〔日本元号〕(沒有日，元号可能有誤)", preedittext)
-    yield_c( eng1_m_date(m)..", "..y, "〔英文 美式/英式〕", preedittext)
-    yield_c( eng2_m_date(m)..", "..y, "〔英文美式〕", preedittext)
-    yield_c( eng3_m_date(m).." "..y, "〔英文美式〕", preedittext)
-    yield_c( eng1_m_date(m).." "..y, "〔英文英式〕", preedittext)
-    yield_c( eng2_m_date(m).." "..y, "〔英文英式〕", preedittext)
-    return
-  end
-
-  local y = string.match(input, env.prefix_s .. "(%d+)y$")
-  -- if not y then y = string.match(input, env.prefix .. "y(%d+)$") end
-  if y then
-    local preedittext = env.prefix .. " " .. y .. "Y" .. "\t 【自訂日期：○年】"
-    yield_c( y.."年" , "〔日期〕", preedittext)
-    yield_c( " "..y.." 年 " , "〔*日期*〕", preedittext)
-    yield_c( fullshape_number(y).."年" , "〔全形〕", preedittext)
-    yield_c( ch_y_date(y).."年" , "〔小寫中文〕", preedittext)
-    yield_c( chb_y_date(y).."年" , "〔大寫中文〕", preedittext)
-    if (tonumber(y) > 1911) then
-      yield_c( "民國"..min_guo(y).."年", "〔民國〕", preedittext)
-      yield_c( "民國"..purech_number(min_guo(y)).."年", "〔民國〕", preedittext)
-      yield_c( "民國"..read_number(confs[1], min_guo(y)).."年", "〔民國〕", preedittext)
-    elseif (tonumber(y) <= 1911) then
-      yield_c( "民國前"..min_guo(y).."年", "〔民國〕", preedittext)
-      yield_c( "民國前"..purech_number(min_guo(y)).."年", "〔民國〕", preedittext)
-      yield_c( "民國前"..read_number(confs[1], min_guo(y)).."年", "〔民國〕", preedittext)
-    end
-    -- yield_c( y.."年 ", "〔日文日期〕", preedittext)
-    -- local jpymd2, jp_y2 = jp_ymd(y,"1","1")
-    -- yield_c( jp_y2 , "〔日本元号〕(沒有月日，元号可能有誤)", preedittext)
-    yield_c( y, "〔英文 美式/英式〕", preedittext)
-
-    return
-  end
-
-  local m = string.match(input, env.prefix_s .. "(%d?%d)m$")
-  -- if not m then m =  string.match(input, env.prefix .. "m(%d?%d)$") end
-  if m and tonumber(m)<13 then
-    local preedittext = env.prefix .. " " .. m .. "M" .. "\t 【自訂日期：○月】"
-    yield_c( m.."月" , "〔日期〕", preedittext)
-    yield_c( " "..m.." 月 " , "〔*日期*〕", preedittext)
-    yield_c( fullshape_number(m).."月" , "〔全形〕", preedittext)
-    yield_c( ch_m_date(m).."月" , "〔小寫中文〕", preedittext)
-    yield_c( chb_m_date(m).."月" , "〔大寫中文〕", preedittext)
-    yield_c( jp_m_date(m), "〔日文日〕", preedittext)
-    yield_c( eng1_m_date(m), "〔英文 美式/英式〕", preedittext)
-    yield_c( eng2_m_date(m), "〔英文 美式/英式〕", preedittext)
-    yield_c( eng3_m_date(m), "〔英文美式〕", preedittext)
-    return
-  end
-
-  local d = string.match(input, env.prefix_s .. "(%d?%d)d$")
-  -- if not d then d =  string.match(input, env.prefix .. "d(%d?%d)$") end
-  if d and tonumber(d)<32 then
-    local preedittext = env.prefix .. " " .. d .. "D" .. "\t 【自訂日期：○日】"
-    yield_c( d.."日" , "〔日期〕", preedittext)
-    yield_c( " "..d.." 日 " , "〔*日期*〕", preedittext)
-    yield_c( fullshape_number(d).."日" , "〔全形〕", preedittext)
-    yield_c( ch_d_date(d).."日" , "〔小寫中文〕", preedittext)
-    yield_c( chb_d_date(d).."日" , "〔大寫中文〕", preedittext)
-    yield_c( jp_d_date(d), "〔日文〕", preedittext)
-    yield_c( eng2_d_date(d), "〔英文 美式/英式〕", preedittext)
-    yield_c( eng3_d_date(d), "〔英文 美式/英式〕", preedittext)
-    yield_c( eng4_d_date(d), "〔英文美式〕", preedittext)
-    yield_c( "the "..eng1_d_date(d), "〔英文 美式/英式〕", preedittext)
-    yield_c( "The "..eng1_d_date(d), "〔英文英式〕", preedittext)
-    return
-  end
-
-
-  --- 補以下開頭括號缺漏（另改成如同啟始符）
+  -- local y, m, m_suffix, d, d_suffix  = string.match(input, env.prefix_s .. "(%d+)y(%d%d?)(m?)(%d?%d?)(d?)$")
+  local nm, nd, nd_suffix = string.match(input, env.prefix_s .. "(%d%d?)m(%d%d?)(d?)$")
+  ---
   local paren_left_q = string.match(input, env.prefix_s .. "([q(][q(]?)$")
-  if paren_left_q then
-    local paren_left_q = string.gsub(paren_left_q, "q", "(")
-    yield_c( "", "  ~ [-.0-9]+[ + - * / ^ ( ) ]...〔數字和計算機〕", env.prefix .. " " .. paren_left_q .. "\t 【數字和計算機】▶")
-    -- yield_c( "", "  ~ [-.0-9]+〔數字〕")
-    -- yield_c( "", "  ~ [-.0-9]+[ + - * / ^ ( ) ]...〔計算機〕")
-    -- yield_c( "(", "〔括號〕")
-    return
-  end
-
+  local neg_nf = string.match(input, env.prefix_s .. "[q(]?[q(]?[-r]$")
+  local dot = string.match(input, env.prefix_s .. "[q(]?[q(]?%.$")
+  local neg_nf_dot = string.match(input, env.prefix_s .. "[q(]?[q(]?[-r]%.$")
+  local double_dot_error = string.match(input, env.prefix_s .. "[-rq(]?[-rq(]?%d*%.%d*%.%d*$")
+  local double_neg_error = string.match(input, env.prefix_s .. "[q(]?[q(]?[-r][-r]+%d*$")
+  local double_neg_bracket_error = string.match(input, env.prefix_s .. "[-r][q(]%d*$")
+  local neg_n, dot0 ,numberout, dot1, afterdot = string.match(input, env.prefix_s .. "([q(]?[q(]?[-r]?)(%.?)(%d+)(%.?)(%d*)$")
+  local cal_input = string.match(input, env.prefix_s .. "([q(]?[q(]?[-r]?[%d.]+[-+*/^asrvxqw()][-+*/^asrvxqw().%d]*)$")
+  ---
+  ---
   local num_preedit = string.match(input, env.prefix_s .. "([-rq(.%d]+)$") or ""
   local num_preedit = string.gsub(num_preedit,  "r", "-")
   local num_preedit = string.gsub(num_preedit,  "q", "(")
   local num_preedit = env.prefix .. " " .. num_preedit .. "\t 【數字】"  -- 數字格式開始
 
-  --- 補以下開頭負號缺漏
-  local neg_nf = string.match(input, env.prefix_s .. "[q(]?[q(]?[-r]$")
-  if neg_nf then
-    yield_c( "-", "〔一般負號〕", num_preedit)
-    yield_c( "−", "〔數學負號〕", num_preedit)
-    yield_c( "－", "〔全形負號〕", num_preedit)
-    yield_c( "⁻", "〔上標負號〕", num_preedit)
-    yield_c( "₋", "〔下標負號〕", num_preedit)
-    yield_c( "負", "〔中文負號〕", num_preedit)
-    yield_c( "槓", "〔軍中負號〕", num_preedit)
-    yield_c( "−⃝", "〔帶圈負號〕", num_preedit)  -- ㊀ -⃝ −︎⃝ ⊝ ⊖
-    yield_c( "⛔︎", "〔反白帶圈負號〕", num_preedit)
-    yield_c( "負⃝", "〔帶圈中文負號〕", num_preedit)  -- 負︎⃝
-    yield_c( "(負)", "〔帶括中文負號〕", num_preedit)
-    yield_c( "➖", "〔鍵帽負號/加粗減號〕", num_preedit)  -- 〔加粗的減號〕
-    -- yield_c( "⛔", "〔鍵帽負號〕", num_preedit)  -- ➖
-    yield_c( "-⃣", "〔鍵帽負號〕(非標準)", num_preedit)  -- -⃣ −⃣
-    yield_c( "⠤", "〔點字〕(computer/unified)", num_preedit)
-    return
-  end
-
-  --- 補以下開頭小數點缺漏
-  local dot = string.match(input, env.prefix_s .. "[q(]?[q(]?%.$")
-  if dot then
-    yield_c( ".", "〔一般小數點〕", num_preedit)
-    yield_c( "．", "〔全形點〕", num_preedit)
-    yield_c( "⋅", "〔上標小數點〕", num_preedit)
-    yield_c( "點", "〔中文小數點〕", num_preedit)
-    -- yield_c( "點", "〔軍中小數點〕", num_preedit)
-    yield_c( "⠨", "〔點字〕(computer)", num_preedit)
-    yield_c( "⠲", "〔點字〕(unified)", num_preedit)
-    yield_c( "٫", "〔阿拉伯文〕", num_preedit)
-    return
-  end
-
-  --- 補以下開頭負號+小數點缺漏
-  local neg_nf_dot = string.match(input, env.prefix_s .. "[q(]?[q(]?[-r]%.$")
-  if neg_nf_dot then
-    yield_c( "-0.", "〔一般〕", num_preedit)
-    yield_c( ",", "〔千分位〕", num_preedit)
-    yield_c( "-0.000000E+00", "〔科學計數〕", num_preedit)
-    yield_c( "-0.000000e+00", "〔科學計數〕", num_preedit)
-    yield_c( "−𝟎.", "〔數學粗體〕", num_preedit)
-    yield_c( "−𝟘.", "〔數學空心〕", num_preedit)
-    yield_c( "－０.", "〔全形〕", num_preedit)
-    yield_c( "⁻⁰⋅", "〔上標〕", num_preedit)
-    yield_c( "₋₀.", "〔下標〕", num_preedit)
-    yield_c( "負〇點", "〔小寫中文〕", num_preedit)
-    yield_c( "負零點", "〔大寫中文〕", num_preedit)
-    yield_c( "負點", "〔純中文〕", num_preedit)
-    yield_c( "槓點", "〔軍中〕", num_preedit)
-    yield_c( "⠤⠨", "〔點字〕(computer)", num_preedit)
-    yield_c( "⠤⠲", "〔點字〕(unified)", num_preedit)
-    return
-  end
-
-  --- 輸入「數字」格式錯誤之提示（於「數字」模式，「計算機」另行處理）
-  local double_dot_error = string.match(input, env.prefix_s .. "[-rq(]?[-rq(]?%d*%.%d*%.%d*$")
-  local double_neg_error = string.match(input, env.prefix_s .. "[q(]?[q(]?[-r][-r]+%d*$")
-  local double_neg_bracket_error = string.match(input, env.prefix_s .. "[-r][q(]%d*$")
-  if double_dot_error then
-    yield_c( "" , "〔不能兩個小數點〕", num_preedit)  --字符過濾可能會過濾掉""整個選項。
-    return
-  elseif double_neg_error then
-    yield_c( "" , "〔不能兩個負號〕", num_preedit)
-    return
-  elseif double_neg_bracket_error then
-    yield_c( "" , "〔不能負號接括號〕", num_preedit)
-    return
-  end
-
-  -- local numberout = string.match(input, env.prefix .. "/?(%d+)$")
-  local neg_n, dot0 ,numberout, dot1, afterdot = string.match(input, env.prefix_s .. "([q(]?[q(]?[-r]?)(%.?)(%d+)(%.?)(%d*)$")
-  if (tonumber(numberout)~=nil) then
-    local neg_n = string.gsub(neg_n, "r", "-")  --配合計算機算符
-    local neg_n = string.gsub(neg_n, "[q(]", "")  --配合計算機算符
-
-    if dot0~="" and dot1~="" then
-      yield_c( "" , "〔不能兩個小數點〕", num_preedit)  --字符過濾可能會過濾掉""整個選項。
-      return
-    elseif (dot0~="") then
-      afterdot = numberout
-      dot1 = dot0
-      numberout = "0"
-    end
-
-    local neg_n_m = string.gsub(neg_n, "-", "−")
-    local neg_n_f = string.gsub(neg_n, "-", "－")
-    local neg_n_h = string.gsub(neg_n, "-", "⁻")
-    local neg_n_l = string.gsub(neg_n, "-", "₋")
-    local neg_n_c = string.gsub(neg_n, "-", "負")
-    local neg_n_s = string.gsub(neg_n, "-", "槓")
-    local neg_n_q = string.gsub(neg_n, "-", "−⃝")  -- ㊀ -⃝ −︎⃝ ⊝ ⊖
-    local neg_n_a = string.gsub(neg_n, "-", "⛔︎")
-    local neg_n_z = string.gsub(neg_n, "-", "負⃝")  -- 負︎⃝
-    local neg_n_p = string.gsub(neg_n, "-", "(負)")
-    local neg_n_k = string.gsub(neg_n, "-", "➖")  -- ⛔
-    local neg_n_k_ns = string.gsub(neg_n, "-", "-⃣")  -- -⃣ −⃣
-    local neg_n_b = string.gsub(neg_n, "-", "⠤")
-
-  -- if numberout~=nil and tonumber(nn)~=nil then
-    -- local nn = string.sub(numberout, 1)
-    --[[ 用 yield 產生一個候選項
-    候選項的構造函數是 Candidate，它有五個參數：
-    - type: 字符串，表示候選項的類型（可隨意取）
-    - start: 候選項對應的輸入串的起始位置
-    - _end:  候選項對應的輸入串的結束位置
-    - text:  候選項的文本
-    - comment: 候選項的注釋
-    --]]
-    yield_c( neg_n .. numberout .. dot1 .. afterdot , "〔一般〕", num_preedit)
-
-    -- if string.len(numberout) < 4 or neg_n~="" then
-    if string.len(numberout) < 4 then
-      yield_c( "," , "〔千分位〕", num_preedit)
-    else
-      -- local k = string.sub(numberout, 1, -1) -- 取參數
-      local result = formatnumberthousands(numberout) --- 調用算法
-      yield_c( neg_n .. result .. dot1 .. afterdot , "〔千分位〕", num_preedit)
-    end
-
-    yield_c( string.format("%E", neg_n .. numberout .. dot1 .. afterdot ), "〔科學計數〕", num_preedit)
-    yield_c( string.format("%e", neg_n .. numberout .. dot1 .. afterdot ), "〔科學計數〕", num_preedit)
-    -- if neg_n == "" then
-    --   yield_c( math1_number(numberout) .. dot1 .. math1_number(afterdot), "〔數學粗體數字〕", num_preedit)
-    --   yield_c( math2_number(numberout) .. dot1 .. math2_number(afterdot), "〔數學空心數字〕", num_preedit)
-    -- elseif neg_n ~="" then
-    --   yield_c( neg_n .. " " .. math1_number(numberout) .. dot1 .. math1_number(afterdot), "〔數學粗體數字〕", num_preedit)
-    --   yield_c( neg_n .. " " .. math2_number(numberout) .. dot1 .. math2_number(afterdot), "〔數學空心數字〕", num_preedit)
-    -- end
-    yield_c( neg_n_f .. fullshape_number(numberout) .. dot1 .. fullshape_number(afterdot), "〔全形〕", num_preedit)
-    yield_c( neg_n_m .. mm_number(numberout) .. dot1 .. mm_number(afterdot), "〔等寬體〕", num_preedit)
-    yield_c( neg_n_m .. math2_number(numberout) .. dot1 .. math2_number(afterdot), "〔雙線體〕", num_preedit)
-    yield_c( neg_n_m .. math1_number(numberout) .. dot1 .. math1_number(afterdot), "〔粗體〕", num_preedit)
-    yield_c( neg_n_m .. mss_number(numberout) .. dot1 .. mss_number(afterdot), "〔無襯線體〕", num_preedit)
-    yield_c( neg_n_m .. mssb_number(numberout) .. dot1 .. mssb_number(afterdot), "〔無襯線粗體〕", num_preedit)
-    yield_c( neg_n_h .. little1_number(numberout..dot1..afterdot), "〔上標〕", num_preedit)
-    yield_c( neg_n_l .. little2_number(numberout..dot1..afterdot), "〔下標〕", num_preedit)
-    --- 超過「1000垓」則不顯示中文數字
-    if (string.len(numberout) < 25) then
-      yield_c( neg_n_c .. read_number(confs[1], numberout) .. purech_number(dot1..afterdot), confs[1].comment, num_preedit)
-      yield_c( neg_n_c .. read_number_bank(confs[2], numberout) .. purebigch_number(dot1..afterdot), confs[2].comment, num_preedit)
-    else
-      yield_c( "〇" , "（超過 1000垓/24位 計算限制）" .. confs[1].comment, num_preedit)
-      yield_c( "零" , "（超過 1000垓/24位 計算限制）" .. confs[2].comment, num_preedit)
-    end
-
-    if (dot1=="") then
-
-      -- --- 超過「1000垓」則不顯示中文數字
-      -- if (string.len(numberout) < 25) then
-      --   -- for _, conf in ipairs(confs) do
-      --   --   local r = read_number(conf, nn)
-      --   --   yield_c( r, conf.comment)
-      --   -- end
-      --   yield_c( neg_n_c .. read_number(confs[1], nn), confs[1].comment)
-      --   yield_c( neg_n_c .. read_number_bank(confs[2], nn), confs[2].comment)
-      -- -- else
-      -- --   yield_c( "超過位數", confs[1].comment)
-      -- --   yield_c( "超過位數", confs[2].comment)
-      -- end
-
-      if (string.len(numberout) < 2) then
-        yield_c( "元整", "〔純中文數字〕", num_preedit)
-      else
-        yield_c( neg_n_c .. purech_number(numberout), "〔純中文〕", num_preedit)
-      end
-
-      yield_c( neg_n_s .. military_number(numberout), "〔軍中〕", num_preedit)
-
-      yield_c( neg_n_q .. circled1_number(numberout), "〔帶圈〕", num_preedit)
-      yield_c( neg_n_q .. circled2_number(numberout), "〔帶圈無襯線〕", num_preedit)
-      yield_c( neg_n_a .. circled3_number(numberout), "〔反白帶圈〕", num_preedit)
-      yield_c( neg_n_a .. circled4_number(numberout), "〔反白帶圈無襯線〕", num_preedit)
-      yield_c( neg_n_z .. circled5_number(numberout), "〔帶圈中文〕", num_preedit)
-      yield_c( neg_n_p .. paren_number(numberout), "〔帶括中文〕", num_preedit)
-
-      yield_c( neg_n_k .. keycap_number(numberout), "〔鍵帽〕", num_preedit)
-      yield_c( neg_n_k_ns .. keycap_ns_number(numberout), "〔鍵帽〕(非標準)", num_preedit)
-      yield_c( neg_n_b .. braille_c_number(numberout), "〔點字〕(computer)", num_preedit)
-      -- yield_c( neg_n_b .. "⠼" .. braille_c_number(numberout), "〔點字(一般)〕", num_preedit)
-      yield_c( neg_n_b .. "⠼" .. braille_u_number(numberout), "〔點字〕(unified)", num_preedit)
-      if neg_n=="" then
-        yield_c( arabic_indic_number(numberout), "〔阿拉伯文〕", num_preedit)
-        yield_c( extended_arabic_indic_number(numberout), "〔東阿拉伯文〕", num_preedit)
-        yield_c( devanagari_number(numberout), "〔天城文〕", num_preedit)
-      end
-
-      if (neg_n=="") then
-        if tonumber(numberout)==1 or tonumber(numberout)==0 then
-          yield_c( string.sub(numberout, -1), "〔二進位〕", num_preedit)
-        --- 浮點精度關係，二進制轉換運算中：
-        --- math.floor 極限是小數點後15位(小於16位，1.9999999999999999)
-        --- math.fmod 極限是小數點後13位(小於14位，1.99999999999999，14位開頭為偶數時除2是正確的，奇數則不正確)
-        elseif (string.len(numberout) < 14) then
-        --- （以下還是有錯誤！）等於大於9999999999999999（16位-1），lua中幾個轉換函數都會出錯，運算會不正確
-        -- elseif (tonumber(numberout) < 9999999999999999) then
-        -- elseif (string.len(numberout) < 16) then
-          yield_c( Dec2bin(numberout), "〔二進位〕", num_preedit)
-        else
-          yield_c( "bin", "（超過 14位 會有誤）〔二進位〕", num_preedit)
-          -- yield_c( "%b", "（數值超過 14位 可能會不正確）〔二進位〕", num_preedit)
-          -- yield_c( "", "（數值超過 16位-1 會不正確）〔二進位〕", num_preedit)
-        end
-
-        --- 整數庫限制：最大的64位元整數超過64位等同十進制2^63，超過則報錯，極限2^63-1，超過設定不顯示
-        if (tonumber(numberout) < 9223372036854775808) then
-        -- if (string.len(numberout) < 19) then
-          yield_c( string.format("%X",numberout), "〔十六進位〕", num_preedit)
-          yield_c( string.format("%x",numberout), "〔十六進位〕", num_preedit)
-          yield_c( string.format("%o",numberout), "〔八進位〕", num_preedit)
-        else
-          yield_c( "Hex", "（超過 2⁶³-1 報錯）〔十六進位〕", num_preedit)
-          yield_c( "hex", "（超過 2⁶³-1 報錯）〔十六進位〕", num_preedit)
-          yield_c( "oct", "（超過 2⁶³-1 報錯）〔八進位〕", num_preedit)
-        end
-      end
-
-    elseif (dot0~="") then
-      yield_c( neg_n_c .. purech_number(dot1..afterdot), "〔純中文〕", num_preedit)
-      yield_c( neg_n_s .. military_number(dot1..afterdot), "〔軍中〕", num_preedit)
-      yield_c( neg_n_b .. braille_c_number(dot1..afterdot), "〔點字〕(computer)", num_preedit)
-      -- yield_c( neg_n_b .. "⠼" .. braille_c_number(dot1..afterdot), "〔點字(一般)〕", num_preedit)
-      yield_c( neg_n_b .. "⠼" .. braille_u_number(dot1..afterdot), "〔點字〕(unified)", num_preedit)
-      if neg_n=="" then
-        yield_c( "٠" .. arabic_indic_number(dot1..afterdot), "〔阿拉伯文〕", num_preedit)
-        yield_c( "۰" .. extended_arabic_indic_number(dot1..afterdot), "〔東阿拉伯文〕", num_preedit)
-      end
-      return
-    elseif dot0=="" and dot1~="" then
-      if (string.len(numberout) < 2) then
-        yield_c( "元整", "〔純中文〕", num_preedit)
-      else
-        yield_c( neg_n_c .. purech_number(numberout..dot1..afterdot), "〔純中文〕", num_preedit)
-      end
-      yield_c( neg_n_s .. military_number(numberout..dot1..afterdot), "〔軍中〕", num_preedit)
-      yield_c( neg_n_b .. braille_c_number(numberout..dot1..afterdot), "〔點字〕(computer)", num_preedit)
-      -- yield_c( neg_n_b .. "⠼" .. braille_c_number(numberout..dot1..afterdot), "〔點字(一般)〕", num_preedit)
-      yield_c( neg_n_b .. "⠼" .. braille_u_number(numberout..dot1..afterdot), "〔點字〕(unified)", num_preedit)
-      if neg_n=="" then
-        yield_c( arabic_indic_number(numberout..dot1..afterdot), "〔阿拉伯文〕", num_preedit)
-        yield_c( extended_arabic_indic_number(numberout..dot1..afterdot), "〔東阿拉伯文〕", num_preedit)
-      end
-      return
-    end
-
-    return
-  end
-
-  local num_preedit = nil  -- 數字格式結束，清空 num_preedit 記憶
-
-
-  --- 計算機
-  local c_input = string.match(input, env.prefix_s .. "([q(]?[q(]?[-r]?[%d.]+[-+*/^asrvxqw()][-+*/^asrvxqw().%d]*)$")
-  if c_input then
-    local c_input = string.gsub(c_input, "a", "+")
-    local c_input = string.gsub(c_input, "s", "^")
-    local c_input = string.gsub(c_input, "r", "-")
-    local c_input = string.gsub(c_input, "v", "/")
-    local c_input = string.gsub(c_input, "x", "*")
-    local c_input = string.gsub(c_input, "q", "(")
-    local c_input = string.gsub(c_input, "w", ")")
-    local input_exp = string.gsub(c_input, "^0+(%d)", "%1")
-    local input_exp = string.gsub(input_exp, "([-+*/^()])0+(%d)", "%1%2")
-    --會出 Bug -- local input_exp = string.gsub(input_exp, "(%d*%.%d*0)$", function(n) return string.format("%g",n) end)
-    --會出 Bug -- local input_exp = string.gsub(input_exp, "(%d*%.%d*0)([-+*/^()])", function(n, opr) return string.format("%g",n) .. opr end)
-    local input_exp = string.gsub(input_exp, "(%d*%.%d*0)$", function(n) return string.gsub(n,"0+$", "") end)  --去除小數點後末尾0
-    local input_exp = string.gsub(input_exp, "(%d*%.%d*0)([-+*/^()])", function(n, opr) return string.gsub(n,"0+$", "") .. opr end)  --去除小數點後末尾0
-    local input_exp = string.gsub(input_exp, "^%.", "0.")
-    local input_exp = string.gsub(input_exp, "%.%$", "")
-    local input_exp = string.gsub(input_exp, "%.([-+*/^()])", "%1")
-    local input_exp = string.gsub(input_exp, "([-+*/^()])%.", "%10.")
-    local c_preedit = string.gsub(c_input, "([-+*/^()])", " %1 ")
-
-    local c_output = simple_calculator(input_exp)[1]
-    local output_exp = simple_calculator(input_exp)[2]
-    local s_output = simple_calculator(input_exp)[3]
-
-    local preedittext = env.prefix .. " " .. c_preedit .. "\t 【計算機】"
-    if (string.sub(c_output, 1,1)=="E" or string.sub(c_output, 1,1)=="W") then
-      yield_c( "", c_output.."〔結果〕", preedittext)  -- yield(cc_out_error)
-      yield_c( s_output, "〔 Waring 結果〕", preedittext)  -- yield(cc_out_shadow)
-      yield_c( output_exp .. "=" .. s_output, "〔 Waring 規格化算式〕", preedittext)  -- yield(cc_exp_error)
-    else
-      yield_c( c_output, "〔結果〕", preedittext)  -- yield(cc_out)
-      -- if s_output~="" then
-      --   yield_c( s_output, "〔 Waring 結果〕", preedittext)  -- yield(cc_out_shadow)
-      -- end
-      yield_c( output_exp .. "=" .. c_output, "〔規格化算式〕", preedittext)  -- yield(cc_exp)
-      -- yield_c( input_exp .. "=" .. c_output, "〔規格化算式〕", preedittext)  -- yield(cc_exp)
-    end
-    -- if s_output~="" then
-    --   yield_c( s_output, "〔 Waring 結果〕", preedittext)  -- yield(cc_out_shadow)
-    -- end
-    yield_c( "", "※  會有浮點數誤差和錯誤；括號限兩層三堆；14位數限制", preedittext)  -- yield(cc_statement)
-    -- yield_c( "", "※  會有浮點數誤差和錯誤；括號限兩層；14位數限制", preedittext)
-    return
-  end
-
------------------------------
 -----------------------------
 
-  --- Lua 字符類依賴於本地環境，故'[a-z]'可能與'%l'表示的字符集不同。一般情況下，後者包括'ç'和'ã'，前者沒有。
-  --- 盡量使用後者來表示字母，除非出於某些特殊考慮，因後者更簡單、方便、更高效。
-  --- ::Label::之後不要接變數，例：local abc = xxx，易產生錯誤！
-  local op_check = string.match(input, env.prefix_s .. "j(%l*)$")
-  local k_key = string.match(input, env.prefix_s .. "k%l*$")
-  local t_key = string.match(input, env.prefix_s .. "t%l*$")
-  local n_key = string.match(input, env.prefix_s .. "n%l*$")
-  local y_key = string.match(input, env.prefix_s .. "y%l*$")
-  local m_key = string.match(input, env.prefix_s .. "m%l*$")
-  local d_key = string.match(input, env.prefix_s .. "d%l*$")
-  local w_key = string.match(input, env.prefix_s .. "w%l*$")
-  local fh_key = string.match(input, env.prefix_s .. "[fh]%l*$")
-  local englishout1 = string.match(input, env.prefix_s .. "/([%l.,/'-]+)$")
-  local englishout2 = string.match(input, env.prefix_s .. "\'([%l.,/'-]+)$")
-  local englishout3 = string.match(input, env.prefix_s .. ";([%l.,/'-]+)$")
-  local utf_input = string.match(input, env.prefix_s .. "([xuco][a-f%d]+)$")
-  local urlencode_input = string.match(input, env.prefix_s .. "i([%l%d][a-f%d]*)$")
   if op_check then
     goto op_check_label
+  ---
   elseif k_key then
     goto k_label
+  ---
   elseif t_key then
     goto t_label
   elseif n_key then
     goto n_label
-  elseif y_key then
-    goto y_label
-  elseif m_key then
-    goto m_label
   elseif d_key then
     goto d_label
   elseif w_key then
     goto w_label
+  elseif y_key then
+    goto y_label
+  elseif m_key then
+    goto m_label
   elseif fh_key then
     goto fh_label
+  ---
   elseif englishout1 then
     goto englishout1_label
   elseif englishout2 then
     goto englishout2_label
   elseif englishout3 then
     goto englishout3_label
+  ---
   elseif utf_input then
     goto utf_input_label
   elseif urlencode_input then
     goto urlencode_input_label
+  ---
+  elseif xy then
+    goto xy_label
+  elseif xm then
+    goto xm_label
+  elseif xd then
+    goto xd_label
+  elseif y then
+    goto ym_ymd_label
+  elseif nm then
+    goto nmnd_label
+  ---
+  elseif paren_left_q then
+    goto paren_left_q_label
+  elseif neg_nf then
+    goto neg_nf_label
+  elseif dot then
+    goto dot_label
+  elseif neg_nf_dot then
+    goto neg_nf_dot_label
+  elseif double_dot_error or double_neg_error or double_neg_bracket_error then
+    goto double_error_label
+  elseif numberout then
+    goto numberout_label
+  elseif cal_input then
+    goto cal_input_label
+  ---
   else
+    -- local num_preedit = nil  -- 數字格式結束，清空 num_preedit 記憶
     return
   end
 
@@ -1585,6 +1165,159 @@ local function translate(input, seg, env)
   --   yield_c( os.date("%H:%M:%S"), "〔時:分:秒〕")
   --   return
   -- end
+
+-----------------------------
+
+  ::d_label::
+
+  if (input == env.prefix .. "d") then
+    local preedittext = input .. "\t 【現時：日】"
+    yield_c( os.date("%d"), " ~d   ~o", preedittext)
+    yield_c( string.gsub(os.date("%d日"), "^0", ""), "〔日期〕 ~c", preedittext)
+    yield_c( rqzdx1(3), "〔中數〕 ~z", preedittext)
+    -- yield_c( rqzdx2(3), "〔日〕", preedittext)
+    yield_c( jp_d_date(os.date("%d")), "〔日本格式〕 ~j", preedittext)
+    yield_c( "the "..eng1_d_date(os.date("%d")), "〔英文全寫〕 ~a", preedittext)
+    yield_c( eng2_d_date(os.date("%d")), "〔英文英數〕 ~e", preedittext)
+    -- local a, b, y, m, chinese_d = to_chinese_cal_local(os.time())
+    local a, b, c, d, e, ld = Date2LunarDate(os.date("%Y%m%d"))
+    yield_c( ld, "〔農曆〕 ~l", preedittext)
+    return
+  end
+
+  if (input == env.prefix .. "dl") then
+    local preedittext = input .. "\t 【現時：日】"
+    -- local a, b, y, m, chinese_d = to_chinese_cal_local(os.time())
+    local a, b, c, d, e, ld = Date2LunarDate(os.date("%Y%m%d"))
+    yield_c( ld, "〔農曆〕", preedittext)
+    local All_g, Y_g, M_g, D_g = lunarJzl(os.date("%Y%m%d%H"))
+    yield_c( D_g.."日", "〔農曆干支〕", preedittext)
+    return
+  end
+
+  if (input == env.prefix .. "da") then
+    local preedittext = input .. "\t 【現時：日】"  --〔日〕〔*日*〕
+    yield_c( "the "..eng1_d_date(os.date("%d")), "〔英文全寫〕", preedittext)
+    yield_c( " the "..eng1_d_date(os.date("%d")).." ", "〔*英文全寫*〕", preedittext)
+    yield_c( "The "..eng1_d_date(os.date("%d")), "〔英文全寫〕", preedittext)
+    yield_c( " The "..eng1_d_date(os.date("%d")).." ", "〔*英文全寫*〕", preedittext)
+    return
+  end
+
+  if (input == env.prefix .. "de") then
+    local preedittext = input .. "\t 【現時：日】"  --〔日〕〔*日*〕
+    yield_c( eng2_d_date(os.date("%d")), "〔英文英數〕", preedittext)
+    yield_c( " "..eng2_d_date(os.date("%d")).." ", "〔*英文英數*〕", preedittext)
+    yield_c( eng4_d_date(os.date("%d")), "〔英文英數〕", preedittext)
+    yield_c( " "..eng4_d_date(os.date("%d")).." ", "〔*英文英數*〕", preedittext)
+    -- yield_c( " "..eng3_d_date(os.date("%d")).." ", "〔*英文英數*〕", preedittext)
+    return
+  end
+
+  if (input == env.prefix .. "dj") then
+    local preedittext = input .. "\t 【現時：日】"
+    yield_c( jp_d_date(os.date("%d")), "〔日本格式〕", preedittext)
+    return
+  end
+
+  if (input == env.prefix .. "dc") then
+    local preedittext = input .. "\t 【現時：日】"  --〔日〕〔*日*〕
+    yield_c( string.gsub(os.date("%d日"), "^0", ""), "〔日期〕", preedittext)
+    yield_c( string.gsub(os.date(" %d 日"), "([ ])0", "%1"), "〔*日期〕", preedittext)
+    yield_c( fullshape_number(string.gsub(os.date("%d日"), "^0", "")), "〔日期〕", preedittext)
+    local check_number_format = string.match(os.date("%d"), "^0")
+    if check_number_format then
+      yield_zp(preedittext)
+      yield_c( os.date("%d日"), "〔日期〕", preedittext)
+      yield_c( os.date(" %d 日"), "〔*日期〕", preedittext)
+      yield_c( fullshape_number(os.date("%d")).."日", "〔日期〕", preedittext)
+    end
+    return
+  end
+
+  if (input == env.prefix .. "dd") or (input == env.prefix .. "do") then
+    local preedittext = input .. "\t 【現時：日】"  --〔日〕
+    yield_c( os.date("%d"), "", preedittext)
+    yield_c( fullshape_number(os.date("%d")), "", preedittext)
+    return
+  end
+
+  if (input == env.prefix .. "dz") then
+    local preedittext = input .. "\t 【現時：日】"
+    yield_c( rqzdx1(3), "〔中數〕", preedittext)
+    yield_c( rqzdx2(3), "〔中數〕", preedittext)
+    return
+  end
+
+-----------------------------
+
+  ::w_label::
+
+-- function week_translator0(input, seg)
+  if (input == env.prefix .. "w") then
+    local preedittext = input .. "\t 【現時：週】"  --〔週〕
+    yield_c( "星期"..weekstyle()[1], "〔日期〕 ~c", preedittext)
+    yield_c( "週"..weekstyle()[1], "〔中文〕 ~z", preedittext)
+    yield_c( weekstyle()[5].."曜日", "〔日本格式〕 ~j", preedittext)
+    yield_c( weekstyle()[6], "〔英文全寫〕 ~a", preedittext)
+    yield_c( weekstyle()[7], "〔英文縮寫〕 ~e", preedittext)
+    return
+  end
+
+  if (input == env.prefix .. "wa") then
+    local preedittext = input .. "\t 【現時：週】"  --〔週〕〔*週*〕
+    yield_c( weekstyle()[6], "〔英文全寫〕", preedittext)
+    yield_c( " "..weekstyle()[6].." ", "〔*英文全寫*〕", preedittext)
+    return
+  end
+
+  if (input == env.prefix .. "we") then
+    local preedittext = input .. "\t 【現時：週】"  --〔週〕〔*週*〕
+    yield_c( weekstyle()[7], "〔英文縮寫〕", preedittext)
+    yield_c( " "..weekstyle()[7].." ", "〔*英文縮寫*〕", preedittext)
+    yield_c( weekstyle()[8], "〔英文縮寫〕", preedittext)
+    yield_c( " "..weekstyle()[8].." ", "〔*英文縮寫*〕", preedittext)
+    return
+  end
+
+  if (input == env.prefix .. "wc") then
+    local preedittext = input .. "\t 【現時：週】"  --〔週〕〔*週*〕
+    yield_c( "星期"..weekstyle()[1], "〔日期〕", preedittext)
+    yield_c( " ".."星期"..weekstyle()[1].." ", "〔*日期*〕", preedittext)
+    yield_c( "（".."星期"..weekstyle()[1].."）", "〔日期〕", preedittext)
+    yield_c( " (".."星期"..weekstyle()[1]..") ", "〔*日期*〕", preedittext)
+    yield_c( "(".."星期"..weekstyle()[1]..")", "〔日期〕", preedittext)
+    yield_c( " ".."星期"..weekstyle()[2].." ", "〔*日期*〕", preedittext)
+    return
+  end
+
+  if (input == env.prefix .. "wz") then
+    local preedittext = input .. "\t 【現時：週】"  --〔週〕〔*週*〕
+    yield_c( "週"..weekstyle()[1], "〔中文〕", preedittext)
+    yield_c( " ".."週"..weekstyle()[1].." ", "〔*中文*〕", preedittext)
+    yield_c( "（".."週"..weekstyle()[1].."）", "〔中文〕", preedittext)
+    yield_c( " (".."週"..weekstyle()[1]..") ", "〔*中文*〕", preedittext)
+    yield_c( "(".."週"..weekstyle()[1]..")", "〔中文〕", preedittext)
+    yield_c( " ".."週"..weekstyle()[2].." ", "〔*中文*〕", preedittext)
+    return
+  end
+
+  if (input == env.prefix .. "wj") then
+    local preedittext = input .. "\t 【現時：週】"  --〔週〕〔*週*〕
+    yield_c( weekstyle()[5].."曜日", "〔日本格式〕", preedittext)
+    yield_c( " "..weekstyle()[5].."曜日 ", "〔*日本格式*〕", preedittext)
+    yield_c( "（"..weekstyle()[5].."曜日）", "〔日本格式〕", preedittext)
+    yield_c( " ("..weekstyle()[5].."曜日) ", "〔*日本格式*〕", preedittext)
+    yield_c( "("..weekstyle()[5].."曜日)", "〔日本格式〕", preedittext)
+    yield_c( weekstyle()[5], "〔日本格式〕", preedittext)
+    yield_c( " "..weekstyle()[5].." ", "〔*日本格式*〕", preedittext)
+    yield_c( "（"..weekstyle()[5].."）", "〔日本格式〕", preedittext)
+    yield_c( " ("..weekstyle()[5]..") ", "〔*日本格式*〕", preedittext)
+    yield_c( "("..weekstyle()[5]..")", "〔日本格式〕", preedittext)
+    yield_c( weekstyle()[3], "〔日本格式〕", preedittext)
+    yield_c( weekstyle()[4], "〔日本格式〕", preedittext)
+    return
+  end
 
 -----------------------------
 
@@ -2152,159 +1885,6 @@ local function translate(input, seg, env)
     yield_c( rqzdx1(23).." (".."星期"..weekstyle()[1]..") ", "〔中數〕", preedittext)
     --- 中文大寫數字
     yield_c( rqzdx2(23).." ".."星期"..weekstyle()[2].." ", "〔中數〕", preedittext)
-    return
-  end
-
------------------------------
-
-  ::d_label::
-
-  if (input == env.prefix .. "d") then
-    local preedittext = input .. "\t 【現時：日】"
-    yield_c( os.date("%d"), " ~d   ~o", preedittext)
-    yield_c( string.gsub(os.date("%d日"), "^0", ""), "〔日期〕 ~c", preedittext)
-    yield_c( rqzdx1(3), "〔中數〕 ~z", preedittext)
-    -- yield_c( rqzdx2(3), "〔日〕", preedittext)
-    yield_c( jp_d_date(os.date("%d")), "〔日本格式〕 ~j", preedittext)
-    yield_c( "the "..eng1_d_date(os.date("%d")), "〔英文全寫〕 ~a", preedittext)
-    yield_c( eng2_d_date(os.date("%d")), "〔英文英數〕 ~e", preedittext)
-    -- local a, b, y, m, chinese_d = to_chinese_cal_local(os.time())
-    local a, b, c, d, e, ld = Date2LunarDate(os.date("%Y%m%d"))
-    yield_c( ld, "〔農曆〕 ~l", preedittext)
-    return
-  end
-
-  if (input == env.prefix .. "dl") then
-    local preedittext = input .. "\t 【現時：日】"
-    -- local a, b, y, m, chinese_d = to_chinese_cal_local(os.time())
-    local a, b, c, d, e, ld = Date2LunarDate(os.date("%Y%m%d"))
-    yield_c( ld, "〔農曆〕", preedittext)
-    local All_g, Y_g, M_g, D_g = lunarJzl(os.date("%Y%m%d%H"))
-    yield_c( D_g.."日", "〔農曆干支〕", preedittext)
-    return
-  end
-
-  if (input == env.prefix .. "da") then
-    local preedittext = input .. "\t 【現時：日】"  --〔日〕〔*日*〕
-    yield_c( "the "..eng1_d_date(os.date("%d")), "〔英文全寫〕", preedittext)
-    yield_c( " the "..eng1_d_date(os.date("%d")).." ", "〔*英文全寫*〕", preedittext)
-    yield_c( "The "..eng1_d_date(os.date("%d")), "〔英文全寫〕", preedittext)
-    yield_c( " The "..eng1_d_date(os.date("%d")).." ", "〔*英文全寫*〕", preedittext)
-    return
-  end
-
-  if (input == env.prefix .. "de") then
-    local preedittext = input .. "\t 【現時：日】"  --〔日〕〔*日*〕
-    yield_c( eng2_d_date(os.date("%d")), "〔英文英數〕", preedittext)
-    yield_c( " "..eng2_d_date(os.date("%d")).." ", "〔*英文英數*〕", preedittext)
-    yield_c( eng4_d_date(os.date("%d")), "〔英文英數〕", preedittext)
-    yield_c( " "..eng4_d_date(os.date("%d")).." ", "〔*英文英數*〕", preedittext)
-    -- yield_c( " "..eng3_d_date(os.date("%d")).." ", "〔*英文英數*〕", preedittext)
-    return
-  end
-
-  if (input == env.prefix .. "dj") then
-    local preedittext = input .. "\t 【現時：日】"
-    yield_c( jp_d_date(os.date("%d")), "〔日本格式〕", preedittext)
-    return
-  end
-
-  if (input == env.prefix .. "dc") then
-    local preedittext = input .. "\t 【現時：日】"  --〔日〕〔*日*〕
-    yield_c( string.gsub(os.date("%d日"), "^0", ""), "〔日期〕", preedittext)
-    yield_c( string.gsub(os.date(" %d 日"), "([ ])0", "%1"), "〔*日期〕", preedittext)
-    yield_c( fullshape_number(string.gsub(os.date("%d日"), "^0", "")), "〔日期〕", preedittext)
-    local check_number_format = string.match(os.date("%d"), "^0")
-    if check_number_format then
-      yield_zp(preedittext)
-      yield_c( os.date("%d日"), "〔日期〕", preedittext)
-      yield_c( os.date(" %d 日"), "〔*日期〕", preedittext)
-      yield_c( fullshape_number(os.date("%d")).."日", "〔日期〕", preedittext)
-    end
-    return
-  end
-
-  if (input == env.prefix .. "dd") or (input == env.prefix .. "do") then
-    local preedittext = input .. "\t 【現時：日】"  --〔日〕
-    yield_c( os.date("%d"), "", preedittext)
-    yield_c( fullshape_number(os.date("%d")), "", preedittext)
-    return
-  end
-
-  if (input == env.prefix .. "dz") then
-    local preedittext = input .. "\t 【現時：日】"
-    yield_c( rqzdx1(3), "〔中數〕", preedittext)
-    yield_c( rqzdx2(3), "〔中數〕", preedittext)
-    return
-  end
-
------------------------------
-
-  ::w_label::
-
--- function week_translator0(input, seg)
-  if (input == env.prefix .. "w") then
-    local preedittext = input .. "\t 【現時：週】"  --〔週〕
-    yield_c( "星期"..weekstyle()[1], "〔日期〕 ~c", preedittext)
-    yield_c( "週"..weekstyle()[1], "〔中文〕 ~z", preedittext)
-    yield_c( weekstyle()[5].."曜日", "〔日本格式〕 ~j", preedittext)
-    yield_c( weekstyle()[6], "〔英文全寫〕 ~a", preedittext)
-    yield_c( weekstyle()[7], "〔英文縮寫〕 ~e", preedittext)
-    return
-  end
-
-  if (input == env.prefix .. "wa") then
-    local preedittext = input .. "\t 【現時：週】"  --〔週〕〔*週*〕
-    yield_c( weekstyle()[6], "〔英文全寫〕", preedittext)
-    yield_c( " "..weekstyle()[6].." ", "〔*英文全寫*〕", preedittext)
-    return
-  end
-
-  if (input == env.prefix .. "we") then
-    local preedittext = input .. "\t 【現時：週】"  --〔週〕〔*週*〕
-    yield_c( weekstyle()[7], "〔英文縮寫〕", preedittext)
-    yield_c( " "..weekstyle()[7].." ", "〔*英文縮寫*〕", preedittext)
-    yield_c( weekstyle()[8], "〔英文縮寫〕", preedittext)
-    yield_c( " "..weekstyle()[8].." ", "〔*英文縮寫*〕", preedittext)
-    return
-  end
-
-  if (input == env.prefix .. "wc") then
-    local preedittext = input .. "\t 【現時：週】"  --〔週〕〔*週*〕
-    yield_c( "星期"..weekstyle()[1], "〔日期〕", preedittext)
-    yield_c( " ".."星期"..weekstyle()[1].." ", "〔*日期*〕", preedittext)
-    yield_c( "（".."星期"..weekstyle()[1].."）", "〔日期〕", preedittext)
-    yield_c( " (".."星期"..weekstyle()[1]..") ", "〔*日期*〕", preedittext)
-    yield_c( "(".."星期"..weekstyle()[1]..")", "〔日期〕", preedittext)
-    yield_c( " ".."星期"..weekstyle()[2].." ", "〔*日期*〕", preedittext)
-    return
-  end
-
-  if (input == env.prefix .. "wz") then
-    local preedittext = input .. "\t 【現時：週】"  --〔週〕〔*週*〕
-    yield_c( "週"..weekstyle()[1], "〔中文〕", preedittext)
-    yield_c( " ".."週"..weekstyle()[1].." ", "〔*中文*〕", preedittext)
-    yield_c( "（".."週"..weekstyle()[1].."）", "〔中文〕", preedittext)
-    yield_c( " (".."週"..weekstyle()[1]..") ", "〔*中文*〕", preedittext)
-    yield_c( "(".."週"..weekstyle()[1]..")", "〔中文〕", preedittext)
-    yield_c( " ".."週"..weekstyle()[2].." ", "〔*中文*〕", preedittext)
-    return
-  end
-
-  if (input == env.prefix .. "wj") then
-    local preedittext = input .. "\t 【現時：週】"  --〔週〕〔*週*〕
-    yield_c( weekstyle()[5].."曜日", "〔日本格式〕", preedittext)
-    yield_c( " "..weekstyle()[5].."曜日 ", "〔*日本格式*〕", preedittext)
-    yield_c( "（"..weekstyle()[5].."曜日）", "〔日本格式〕", preedittext)
-    yield_c( " ("..weekstyle()[5].."曜日) ", "〔*日本格式*〕", preedittext)
-    yield_c( "("..weekstyle()[5].."曜日)", "〔日本格式〕", preedittext)
-    yield_c( weekstyle()[5], "〔日本格式〕", preedittext)
-    yield_c( " "..weekstyle()[5].." ", "〔*日本格式*〕", preedittext)
-    yield_c( "（"..weekstyle()[5].."）", "〔日本格式〕", preedittext)
-    yield_c( " ("..weekstyle()[5]..") ", "〔*日本格式*〕", preedittext)
-    yield_c( "("..weekstyle()[5]..")", "〔日本格式〕", preedittext)
-    yield_c( weekstyle()[3], "〔日本格式〕", preedittext)
-    yield_c( weekstyle()[4], "〔日本格式〕", preedittext)
     return
   end
 
@@ -3420,6 +3000,543 @@ local function translate(input, seg, env)
   --   end
   --   return
   -- end
+
+-----------------------------
+-----------------------------
+
+  ::xy_label::
+
+  -- local xy = string.match(input, env.prefix_s .. "(%d+)y$")
+  -- if not xy then xy = string.match(input, env.prefix .. "y(%d+)$") end
+  if xy then
+    local preedittext = env.prefix .. " " .. xy .. "Y" .. "\t 【自訂日期：○年】"
+    yield_c( xy .. "年", "〔日期〕", preedittext)
+    yield_c( " " .. xy .. " 年 ", "〔*日期*〕", preedittext)
+    yield_c( fullshape_number(xy) .. "年", "〔全形〕", preedittext)
+    yield_c( ch_y_date(xy) .. "年", "〔小寫中文〕", preedittext)
+    yield_c( chb_y_date(xy) .. "年", "〔大寫中文〕", preedittext)
+    if (tonumber(xy) > 1911) then
+      yield_c( "民國" .. min_guo(xy) .. "年", "〔民國〕", preedittext)
+      yield_c( "民國" .. purech_number(min_guo(xy)) .. "年", "〔民國〕", preedittext)
+      yield_c( "民國" .. read_number(confs[1], min_guo(xy)) .. "年", "〔民國〕", preedittext)
+    elseif (tonumber(xy) <= 1911) then
+      yield_c( "民國前" .. min_guo(xy) .. "年", "〔民國〕", preedittext)
+      yield_c( "民國前" .. purech_number(min_guo(xy)) .. "年", "〔民國〕", preedittext)
+      yield_c( "民國前" .. read_number(confs[1], min_guo(xy)) .. "年", "〔民國〕", preedittext)
+    end
+    -- yield_c( xy .. "年 ", "〔日文日期〕", preedittext)
+    -- local jpymd2, jp_y2 = jp_ymd(xy, "1", "1")
+    -- yield_c( jp_y2, "〔日本元号〕(沒有月日，元号可能有誤)", preedittext)
+    yield_c( xy, "〔英文 美式/英式〕", preedittext)
+    return
+  end
+
+  ::xm_label::
+
+  -- local xm = string.match(input, env.prefix_s .. "(%d%d?)m$")
+  -- if not xm then xm =  string.match(input, env.prefix .. "m(%d%d?)$") end
+  if xm and tonumber(xm)<13 then
+    local preedittext = env.prefix .. " " .. xm .. "M" .. "\t 【自訂日期：○月】"
+    yield_c( xm .. "月", "〔日期〕", preedittext)
+    yield_c( " " .. xm .. " 月 ", "〔*日期*〕", preedittext)
+    yield_c( fullshape_number(xm) .. "月", "〔全形〕", preedittext)
+    yield_c( ch_m_date(xm) .. "月", "〔小寫中文〕", preedittext)
+    yield_c( chb_m_date(xm) .. "月", "〔大寫中文〕", preedittext)
+    yield_c( jp_m_date(xm), "〔日文日〕", preedittext)
+    yield_c( eng1_m_date(xm), "〔英文 美式/英式〕", preedittext)
+    yield_c( eng2_m_date(xm), "〔英文 美式/英式〕", preedittext)
+    yield_c( eng3_m_date(xm), "〔英文美式〕", preedittext)
+    return
+  elseif xm then  -- 月份大於12跳掉
+    return
+  end
+
+  ::xd_label::
+
+  -- local xd = string.match(input, env.prefix_s .. "(%d%d?)d$")
+  -- if not xd then xd =  string.match(input, env.prefix .. "d(%d%d?)$") end
+  if xd and tonumber(xd)<32 then
+    local preedittext = env.prefix .. " " .. xd .. "D" .. "\t 【自訂日期：○日】"
+    yield_c( xd .. "日", "〔日期〕", preedittext)
+    yield_c( " " .. xd .. " 日 ", "〔*日期*〕", preedittext)
+    yield_c( fullshape_number(xd) .. "日", "〔全形〕", preedittext)
+    yield_c( ch_d_date(xd) .. "日", "〔小寫中文〕", preedittext)
+    yield_c( chb_d_date(xd) .. "日", "〔大寫中文〕", preedittext)
+    yield_c( jp_d_date(xd), "〔日文〕", preedittext)
+    yield_c( eng2_d_date(xd), "〔英文 美式/英式〕", preedittext)
+    yield_c( eng3_d_date(xd), "〔英文 美式/英式〕", preedittext)
+    yield_c( eng4_d_date(xd), "〔英文美式〕", preedittext)
+    yield_c( "the "..eng1_d_date(xd), "〔英文 美式/英式〕", preedittext)
+    yield_c( "The "..eng1_d_date(xd), "〔英文英式〕", preedittext)
+    return
+  elseif xd then  -- 日期大於31跳掉
+    return
+  end
+
+-----------------------------
+
+  ::ym_ymd_label::
+
+  -- local y, m, m_suffix = string.match(input, env.prefix_s .. "(%d+)y(%d%d?)(m?)$")
+  -- if not y then y, m = string.match(input, env.prefix .. "y(%d+)m(%d%d?)$") end
+  -- if y and tonumber(m)<13 then
+
+  -- local y, m, d, d_suffix = string.match(input, env.prefix_s .. "(%d+)y(%d%d?)m(%d%d?)(d?)$")
+  -- if not y then y, m, d = string.match(input, env.prefix .. "y(%d+)m(%d%d?)d(%d%d?)$") end
+  -- if y and tonumber(m)<13 and tonumber(d)<32 then
+
+  if y and d=="" and tonumber(m)<13 then
+    local preedittext = env.prefix .. " " .. y .. "Y " .. m .. string.upper(m_suffix) .. "\t 【自訂日期：○年○月】"
+    local m = tonumber(m) == 0 and "01" or m  -- 「0」校正，置後於「preedittext」，才不會錯誤顯示。
+    yield_c( y .. "年" .. m .. "月", "〔日期〕", preedittext)
+    yield_c( " " .. y .. " 年 " .. m .. " 月 ", "〔*日期*〕", preedittext)
+    yield_c( fullshape_number(y) .. "年" .. fullshape_number(m) .. "月", "〔全形〕", preedittext)
+    yield_c( ch_y_date(y) .. "年" .. ch_m_date(m) .. "月", "〔小寫中文〕", preedittext)
+    yield_c( chb_y_date(y) .. "年" .. chb_m_date(m) .. "月", "〔大寫中文〕", preedittext)
+    if (tonumber(y) > 1911) then
+      yield_c( "民國" .. min_guo(y) .. "年" .. m .. "月", "〔民國〕", preedittext)
+      yield_c( "民國" .. purech_number(min_guo(y)) .. "年" .. ch_m_date(m) .. "月", "〔民國〕", preedittext)
+      yield_c( "民國" .. read_number(confs[1], min_guo(y)) .. "年" .. ch_m_date(m) .. "月", "〔民國〕", preedittext)
+    elseif (tonumber(y) <= 1911) then
+      yield_c( "民國前" .. min_guo(y) .. "年" .. m .. "月", "〔民國〕", preedittext)
+      yield_c( "民國前" .. purech_number(min_guo(y)) .. "年" .. ch_m_date(m) .. "月", "〔民國〕", preedittext)
+      yield_c( "民國前" .. read_number(confs[1], min_guo(y)) .. "年" .. ch_m_date(m) .. "月", "〔民國〕", preedittext)
+    end
+    -- yield_c( y .. "年 " .. jp_m_date(m), "〔日文日期〕", preedittext)
+    -- local jpymd2, jp_y2 = jp_ymd(y, m, "1")
+    -- yield_c( jp_y2 .. m .. "月", "〔日本元号〕(沒有日，元号可能有誤)", preedittext)
+    yield_c( eng1_m_date(m) .. ", " .. y, "〔英文 美式/英式〕", preedittext)
+    yield_c( eng2_m_date(m) .. ", " .. y, "〔英文美式〕", preedittext)
+    yield_c( eng3_m_date(m) .. " " .. y, "〔英文美式〕", preedittext)
+    yield_c( eng1_m_date(m) .. " " .. y, "〔英文英式〕", preedittext)
+    yield_c( eng2_m_date(m) .. " " .. y, "〔英文英式〕", preedittext)
+    return
+  -- end
+  elseif y and d~="" and tonumber(m)<13 and tonumber(d)<32 then
+    local preedittext = env.prefix .. " " .. y .. "Y " .. m .. "M " .. d .. string.upper(d_suffix) .. "\t 【自訂日期：○年○月○日】"
+    local m = tonumber(m) == 0 and "01" or m  -- 「0」校正，置後於「preedittext」，才不會錯誤顯示。
+    local d = tonumber(d) == 0 and "01" or d  -- 「0」校正，置後於「preedittext」，才不會錯誤顯示。
+    yield_c( y .. "年" .. m .. "月" .. d .. "日", "〔日期〕", preedittext)
+    yield_c( " " .. y .. " 年 " .. m .. " 月 " .. d .." 日 ", "〔*日期*〕", preedittext)
+    yield_c( fullshape_number(y) .. "年" .. fullshape_number(m) .. "月" .. fullshape_number(d) .. "日", "〔全形〕", preedittext)
+    yield_c( ch_y_date(y) .. "年" .. ch_m_date(m) .. "月" .. ch_d_date(d) .. "日", "〔小寫中文〕", preedittext)
+    yield_c( chb_y_date(y) .. "年" .. chb_m_date(m) .. "月" .. chb_d_date(d) .. "日", "〔大寫中文〕", preedittext)
+    if (tonumber(y) > 1911) then
+      yield_c( "民國" .. min_guo(y) .. "年" .. m .. "月" .. d .. "日", "〔民國〕", preedittext)
+      yield_c( "民國" .. purech_number(min_guo(y)) .. "年" .. ch_m_date(m) .. "月" .. ch_d_date(d) .. "日", "〔民國〕", preedittext)
+      yield_c( "民國" .. read_number(confs[1], min_guo(y)) .. "年" .. ch_m_date(m) .. "月" .. ch_d_date(d) .. "日", "〔民國〕", preedittext)
+    elseif (tonumber(y) <= 1911) then
+      yield_c( "民國前" .. min_guo(y) .. "年" .. m .. "月" .. d .. "日", "〔民國〕", preedittext)
+      yield_c( "民國前" .. purech_number(min_guo(y)) .. "年" .. ch_m_date(m) .. "月" .. ch_d_date(d) .. "日", "〔民國〕", preedittext)
+      yield_c( "民國前" .. read_number(confs[1], min_guo(y)) .. "年" .. ch_m_date(m) .. "月" .. ch_d_date(d) .. "日", "〔民國〕", preedittext)
+    end
+    -- yield_c( y .. "年 " .. jp_m_date(m) .. jp_d_date(d), "〔日文日期〕", preedittext)
+    local jpymd2, jp_y2 = jp_ymd(y, m, d)
+    yield_c( jp_y2 .. m .. "月" .. d .. "日", "〔日本元号〕", preedittext)
+    yield_c( eng1_m_date(m) .. " " .. eng2_d_date(d) .. ", " .. y, "〔英文美式〕", preedittext)
+    yield_c( eng1_m_date(m) .. " " .. eng3_d_date(d) .. ", " .. y, "〔英文美式〕", preedittext)
+    yield_c( eng2_m_date(m) .. " " .. eng3_d_date(d) .. ", " .. y, "〔英文美式〕", preedittext)
+    yield_c( eng3_m_date(m) .. " " .. eng4_d_date(d) .. " " .. y, "〔英文美式〕", preedittext)
+    yield_c( eng1_m_date(m) .. " the " .. eng1_d_date(d) .. ", " .. y, "〔英文美式〕", preedittext)
+    yield_c( eng2_d_date(d) .. " " .. eng1_m_date(m) .. " " .. y, "〔英文英式〕", preedittext)
+    yield_c( eng3_d_date(d) .. " " .. eng1_m_date(m) .. " " .. y, "〔英文英式〕", preedittext)
+    yield_c( eng2_d_date(d) .. " " .. eng2_m_date(m) .. " " .. y, "〔英文英式〕", preedittext)
+    yield_c( "the " .. eng1_d_date(d) .. " of " .. eng1_m_date(m) .. ", " .. y, "〔英文英式〕", preedittext)
+    yield_c( "The " .. eng1_d_date(d) .. " of " .. eng1_m_date(m) .. ", " .. y, "〔英文英式〕", preedittext)
+    if tonumber(y) > 1899 and tonumber(y) < 2101 then
+      -- local chinese_date_input = to_chinese_cal_local(os.time({year = y, month = m, day = d, hour = 12}))
+      local ll_1b, ll_2b = Date2LunarDate(y .. string.format("%02d", m) .. string.format("%02d", d))
+      -- if (Date2LunarDate~=nil) then
+      if ll_1b~=nil and ll_2b~=nil then
+        yield_c( ll_1b, "〔西曆→農曆〕", preedittext)
+        yield_c( ll_2b, "〔西曆→農曆〕", preedittext)
+      end
+    end
+    if tonumber(y) > 1901 and tonumber(y) < 2101 then
+      local All_g2, Y_g2, M_g2, D_g2 = lunarJzl(y .. string.format("%02d", m) .. string.format("%02d", d) .. 12)
+      if (All_g2~=nil) then
+        yield_c( Y_g2 .. "年" .. M_g2 .. "月" .. D_g2 .. "日", "〔西曆→農曆干支〕", preedittext)
+      end
+      local LDD2D = LunarDate2Date(y .. string.format("%02d", m) .. string.format("%02d", d), 0 )
+      local LDD2D_leap_year = LunarDate2Date(y .. string.format("%02d", m) .. string.format("%02d", d), 1 )
+      -- if (Date2LunarDate~=nil) then
+      if (LDD2D~=nil) then
+        yield_c( LDD2D, "〔農曆→西曆〕", preedittext)
+        yield_c( LDD2D_leap_year, "〔農曆(閏)→西曆〕", preedittext)
+      end
+      -- local chinese_date_input2 = to_chinese_cal(y, m, d)
+      -- if (chinese_date_input2~=nil) then
+      --   yield_c( chinese_date_input2 .. " ", "〔農曆，可能有誤！〕", preedittext)
+      -- end
+    end
+    return
+  elseif y then  -- 月份大於12或日期大於31跳掉
+    return
+  end
+
+-----------------------------
+
+  ::nmnd_label::
+
+  -- local nm, nd, nd_suffix = string.match(input, env.prefix_s .. "(%d%d?)m(%d%d?)(d?)$")
+  -- if not nm then nm, nd =  string.match(input, env.prefix .. "m(%d%d?)d(%d%d?)$") end
+  if nm and tonumber(nm)<13 and tonumber(nd)<32 then
+    local preedittext = env.prefix .. " " .. nm .. "M " .. nd .. string.upper(nd_suffix) .. "\t 【自訂日期：○月○日】"
+    local nm = tonumber(nm) == 0 and "01" or nm  -- 「0」校正，置後於「preedittext」，才不會錯誤顯示。
+    local nd = tonumber(nd) == 0 and "01" or nd  -- 「0」校正，置後於「preedittext」，才不會錯誤顯示。
+    yield_c( nm .. "月" .. nd .. "日", "〔日期〕", preedittext)
+    yield_c( " " .. nm .. " 月 " .. nd .. " 日 ", "〔*日期*〕", preedittext)
+    yield_c( fullshape_number(nm) .. "月" .. fullshape_number(nd) .. "日", "〔全形〕", preedittext)
+    yield_c( ch_m_date(nm) .. "月" .. ch_d_date(nd) .. "日", "〔小寫中文〕", preedittext)
+    yield_c( chb_m_date(nm) .. "月" .. chb_d_date(nd) .. "日", "〔大寫中文〕", preedittext)
+    yield_c( jp_m_date(nm) .. jp_d_date(nd), "〔日文〕", preedittext)
+    yield_c( eng1_m_date(nm) .. " " .. eng2_d_date(nd), "〔英文美式〕", preedittext)
+    yield_c( eng1_m_date(nm) .. " " .. eng3_d_date(nd), "〔英文美式〕", preedittext)
+    yield_c( eng2_m_date(nm) .. " " .. eng3_d_date(nd), "〔英文美式〕", preedittext)
+    yield_c( eng3_m_date(nm) .. " " .. eng4_d_date(nd), "〔英文美式〕", preedittext)
+    yield_c( eng1_m_date(nm) .. " the " .. eng1_d_date(nd), "〔英文美式〕", preedittext)
+    yield_c( eng2_d_date(nd) .. " "..eng1_m_date(nm), "〔英文英式〕", preedittext)
+    yield_c( eng3_d_date(nd) .. " "..eng1_m_date(nm), "〔英文英式〕", preedittext)
+    yield_c( eng2_d_date(nd) .. " "..eng2_m_date(nm), "〔英文英式〕", preedittext)
+    yield_c( "the " .. eng1_d_date(nd) .. " of " .. eng1_m_date(nm), "〔英文英式〕", preedittext)
+    yield_c( "The " .. eng1_d_date(nd) .. " of " .. eng1_m_date(nm), "〔英文英式〕", preedittext)
+    return
+  elseif nm then  -- 月份大於12或日期大於31跳掉
+    return
+  end
+
+-----------------------------
+-----------------------------
+
+  ::paren_left_q_label::
+
+  --- 補以下開頭括號缺漏（另改成如同啟始符）
+  -- local paren_left_q = string.match(input, env.prefix_s .. "([q(][q(]?)$")
+  if paren_left_q then
+    local paren_left_q = string.gsub(paren_left_q, "q", "(")
+    yield_c( "", "  ~ [-.0-9]+[ + - * / ^ ( ) ]...〔數字和計算機〕", env.prefix .. " " .. paren_left_q .. "\t 【數字和計算機】▶")
+    -- yield_c( "", "  ~ [-.0-9]+〔數字〕")
+    -- yield_c( "", "  ~ [-.0-9]+[ + - * / ^ ( ) ]...〔計算機〕")
+    -- yield_c( "(", "〔括號〕")
+    return
+  end
+
+  -- local num_preedit = string.match(input, env.prefix_s .. "([-rq(.%d]+)$") or ""
+  -- local num_preedit = string.gsub(num_preedit,  "r", "-")
+  -- local num_preedit = string.gsub(num_preedit,  "q", "(")
+  -- local num_preedit = env.prefix .. " " .. num_preedit .. "\t 【數字】"  -- 數字格式開始
+
+  ::neg_nf_label::
+
+  --- 補以下開頭負號缺漏
+  -- local neg_nf = string.match(input, env.prefix_s .. "[q(]?[q(]?[-r]$")
+  if neg_nf then
+    yield_c( "-", "〔一般負號〕", num_preedit)
+    yield_c( "−", "〔數學負號〕", num_preedit)
+    yield_c( "－", "〔全形負號〕", num_preedit)
+    yield_c( "⁻", "〔上標負號〕", num_preedit)
+    yield_c( "₋", "〔下標負號〕", num_preedit)
+    yield_c( "負", "〔中文負號〕", num_preedit)
+    yield_c( "槓", "〔軍中負號〕", num_preedit)
+    yield_c( "−⃝", "〔帶圈負號〕", num_preedit)  -- ㊀ -⃝ −︎⃝ ⊝ ⊖
+    yield_c( "⛔︎", "〔反白帶圈負號〕", num_preedit)
+    yield_c( "負⃝", "〔帶圈中文負號〕", num_preedit)  -- 負︎⃝
+    yield_c( "(負)", "〔帶括中文負號〕", num_preedit)
+    yield_c( "➖", "〔鍵帽負號/加粗減號〕", num_preedit)  -- 〔加粗的減號〕
+    -- yield_c( "⛔", "〔鍵帽負號〕", num_preedit)  -- ➖
+    yield_c( "-⃣", "〔鍵帽負號〕(非標準)", num_preedit)  -- -⃣ −⃣
+    yield_c( "⠤", "〔點字〕(computer/unified)", num_preedit)
+    return
+  end
+
+  ::dot_label::
+
+  --- 補以下開頭小數點缺漏
+  -- local dot = string.match(input, env.prefix_s .. "[q(]?[q(]?%.$")
+  if dot then
+    yield_c( ".", "〔一般小數點〕", num_preedit)
+    yield_c( "．", "〔全形點〕", num_preedit)
+    yield_c( "⋅", "〔上標小數點〕", num_preedit)
+    yield_c( "點", "〔中文小數點〕", num_preedit)
+    -- yield_c( "點", "〔軍中小數點〕", num_preedit)
+    yield_c( "⠨", "〔點字〕(computer)", num_preedit)
+    yield_c( "⠲", "〔點字〕(unified)", num_preedit)
+    yield_c( "٫", "〔阿拉伯文〕", num_preedit)
+    return
+  end
+
+  ::neg_nf_dot_label::
+
+  --- 補以下開頭負號+小數點缺漏
+  -- local neg_nf_dot = string.match(input, env.prefix_s .. "[q(]?[q(]?[-r]%.$")
+  if neg_nf_dot then
+    yield_c( "-0.", "〔一般〕", num_preedit)
+    yield_c( ",", "〔千分位〕", num_preedit)
+    yield_c( "-0.000000E+00", "〔科學計數〕", num_preedit)
+    yield_c( "-0.000000e+00", "〔科學計數〕", num_preedit)
+    yield_c( "−𝟎.", "〔數學粗體〕", num_preedit)
+    yield_c( "−𝟘.", "〔數學空心〕", num_preedit)
+    yield_c( "－０.", "〔全形〕", num_preedit)
+    yield_c( "⁻⁰⋅", "〔上標〕", num_preedit)
+    yield_c( "₋₀.", "〔下標〕", num_preedit)
+    yield_c( "負〇點", "〔小寫中文〕", num_preedit)
+    yield_c( "負零點", "〔大寫中文〕", num_preedit)
+    yield_c( "負點", "〔純中文〕", num_preedit)
+    yield_c( "槓點", "〔軍中〕", num_preedit)
+    yield_c( "⠤⠨", "〔點字〕(computer)", num_preedit)
+    yield_c( "⠤⠲", "〔點字〕(unified)", num_preedit)
+    return
+  end
+
+  ::double_error_label::
+
+  --- 輸入「數字」格式錯誤之提示（於「數字」模式，「計算機」另行處理）
+  -- local double_dot_error = string.match(input, env.prefix_s .. "[-rq(]?[-rq(]?%d*%.%d*%.%d*$")
+  -- local double_neg_error = string.match(input, env.prefix_s .. "[q(]?[q(]?[-r][-r]+%d*$")
+  -- local double_neg_bracket_error = string.match(input, env.prefix_s .. "[-r][q(]%d*$")
+  if double_dot_error then
+    yield_c( "" , "〔不能兩個小數點〕", num_preedit)  --字符過濾可能會過濾掉""整個選項。
+    return
+  elseif double_neg_error then
+    yield_c( "" , "〔不能兩個負號〕", num_preedit)
+    return
+  elseif double_neg_bracket_error then
+    yield_c( "" , "〔不能負號接括號〕", num_preedit)
+    return
+  end
+
+  ::numberout_label::
+
+  -- local numberout = string.match(input, env.prefix .. "/?(%d+)$")
+  -- local neg_n, dot0 ,numberout, dot1, afterdot = string.match(input, env.prefix_s .. "([q(]?[q(]?[-r]?)(%.?)(%d+)(%.?)(%d*)$")
+  if (tonumber(numberout)~=nil) then
+    local neg_n = string.gsub(neg_n, "r", "-")  --配合計算機算符
+    local neg_n = string.gsub(neg_n, "[q(]", "")  --配合計算機算符
+
+    if dot0~="" and dot1~="" then
+      yield_c( "" , "〔不能兩個小數點〕", num_preedit)  --字符過濾可能會過濾掉""整個選項。
+      return
+    elseif (dot0~="") then
+      afterdot = numberout
+      dot1 = dot0
+      numberout = "0"
+    end
+
+    local neg_n_m = string.gsub(neg_n, "-", "−")
+    local neg_n_f = string.gsub(neg_n, "-", "－")
+    local neg_n_h = string.gsub(neg_n, "-", "⁻")
+    local neg_n_l = string.gsub(neg_n, "-", "₋")
+    local neg_n_c = string.gsub(neg_n, "-", "負")
+    local neg_n_s = string.gsub(neg_n, "-", "槓")
+    local neg_n_q = string.gsub(neg_n, "-", "−⃝")  -- ㊀ -⃝ −︎⃝ ⊝ ⊖
+    local neg_n_a = string.gsub(neg_n, "-", "⛔︎")
+    local neg_n_z = string.gsub(neg_n, "-", "負⃝")  -- 負︎⃝
+    local neg_n_p = string.gsub(neg_n, "-", "(負)")
+    local neg_n_k = string.gsub(neg_n, "-", "➖")  -- ⛔
+    local neg_n_k_ns = string.gsub(neg_n, "-", "-⃣")  -- -⃣ −⃣
+    local neg_n_b = string.gsub(neg_n, "-", "⠤")
+
+  -- if numberout~=nil and tonumber(nn)~=nil then
+    -- local nn = string.sub(numberout, 1)
+    --[[ 用 yield 產生一個候選項
+    候選項的構造函數是 Candidate，它有五個參數：
+    - type: 字符串，表示候選項的類型（可隨意取）
+    - start: 候選項對應的輸入串的起始位置
+    - _end:  候選項對應的輸入串的結束位置
+    - text:  候選項的文本
+    - comment: 候選項的注釋
+    --]]
+    yield_c( neg_n .. numberout .. dot1 .. afterdot , "〔一般〕", num_preedit)
+
+    -- if string.len(numberout) < 4 or neg_n~="" then
+    if string.len(numberout) < 4 then
+      yield_c( "," , "〔千分位〕", num_preedit)
+    else
+      -- local k = string.sub(numberout, 1, -1) -- 取參數
+      local result = formatnumberthousands(numberout) --- 調用算法
+      yield_c( neg_n .. result .. dot1 .. afterdot , "〔千分位〕", num_preedit)
+    end
+
+    yield_c( string.format("%E", neg_n .. numberout .. dot1 .. afterdot ), "〔科學計數〕", num_preedit)
+    yield_c( string.format("%e", neg_n .. numberout .. dot1 .. afterdot ), "〔科學計數〕", num_preedit)
+    -- if neg_n == "" then
+    --   yield_c( math1_number(numberout) .. dot1 .. math1_number(afterdot), "〔數學粗體數字〕", num_preedit)
+    --   yield_c( math2_number(numberout) .. dot1 .. math2_number(afterdot), "〔數學空心數字〕", num_preedit)
+    -- elseif neg_n ~="" then
+    --   yield_c( neg_n .. " " .. math1_number(numberout) .. dot1 .. math1_number(afterdot), "〔數學粗體數字〕", num_preedit)
+    --   yield_c( neg_n .. " " .. math2_number(numberout) .. dot1 .. math2_number(afterdot), "〔數學空心數字〕", num_preedit)
+    -- end
+    yield_c( neg_n_f .. fullshape_number(numberout) .. dot1 .. fullshape_number(afterdot), "〔全形〕", num_preedit)
+    yield_c( neg_n_m .. mm_number(numberout) .. dot1 .. mm_number(afterdot), "〔等寬體〕", num_preedit)
+    yield_c( neg_n_m .. math2_number(numberout) .. dot1 .. math2_number(afterdot), "〔雙線體〕", num_preedit)
+    yield_c( neg_n_m .. math1_number(numberout) .. dot1 .. math1_number(afterdot), "〔粗體〕", num_preedit)
+    yield_c( neg_n_m .. mss_number(numberout) .. dot1 .. mss_number(afterdot), "〔無襯線體〕", num_preedit)
+    yield_c( neg_n_m .. mssb_number(numberout) .. dot1 .. mssb_number(afterdot), "〔無襯線粗體〕", num_preedit)
+    yield_c( neg_n_h .. little1_number(numberout..dot1..afterdot), "〔上標〕", num_preedit)
+    yield_c( neg_n_l .. little2_number(numberout..dot1..afterdot), "〔下標〕", num_preedit)
+    --- 超過「1000垓」則不顯示中文數字
+    if (string.len(numberout) < 25) then
+      yield_c( neg_n_c .. read_number(confs[1], numberout) .. purech_number(dot1..afterdot), confs[1].comment, num_preedit)
+      yield_c( neg_n_c .. read_number_bank(confs[2], numberout) .. purebigch_number(dot1..afterdot), confs[2].comment, num_preedit)
+    else
+      yield_c( "〇" , "（超過 1000垓/24位 計算限制）" .. confs[1].comment, num_preedit)
+      yield_c( "零" , "（超過 1000垓/24位 計算限制）" .. confs[2].comment, num_preedit)
+    end
+
+    if (dot1=="") then
+
+      -- --- 超過「1000垓」則不顯示中文數字
+      -- if (string.len(numberout) < 25) then
+      --   -- for _, conf in ipairs(confs) do
+      --   --   local r = read_number(conf, nn)
+      --   --   yield_c( r, conf.comment)
+      --   -- end
+      --   yield_c( neg_n_c .. read_number(confs[1], nn), confs[1].comment)
+      --   yield_c( neg_n_c .. read_number_bank(confs[2], nn), confs[2].comment)
+      -- -- else
+      -- --   yield_c( "超過位數", confs[1].comment)
+      -- --   yield_c( "超過位數", confs[2].comment)
+      -- end
+
+      if (string.len(numberout) < 2) then
+        yield_c( "元整", "〔純中文數字〕", num_preedit)
+      else
+        yield_c( neg_n_c .. purech_number(numberout), "〔純中文〕", num_preedit)
+      end
+
+      yield_c( neg_n_s .. military_number(numberout), "〔軍中〕", num_preedit)
+
+      yield_c( neg_n_q .. circled1_number(numberout), "〔帶圈〕", num_preedit)
+      yield_c( neg_n_q .. circled2_number(numberout), "〔帶圈無襯線〕", num_preedit)
+      yield_c( neg_n_a .. circled3_number(numberout), "〔反白帶圈〕", num_preedit)
+      yield_c( neg_n_a .. circled4_number(numberout), "〔反白帶圈無襯線〕", num_preedit)
+      yield_c( neg_n_z .. circled5_number(numberout), "〔帶圈中文〕", num_preedit)
+      yield_c( neg_n_p .. paren_number(numberout), "〔帶括中文〕", num_preedit)
+
+      yield_c( neg_n_k .. keycap_number(numberout), "〔鍵帽〕", num_preedit)
+      yield_c( neg_n_k_ns .. keycap_ns_number(numberout), "〔鍵帽〕(非標準)", num_preedit)
+      yield_c( neg_n_b .. braille_c_number(numberout), "〔點字〕(computer)", num_preedit)
+      -- yield_c( neg_n_b .. "⠼" .. braille_c_number(numberout), "〔點字(一般)〕", num_preedit)
+      yield_c( neg_n_b .. "⠼" .. braille_u_number(numberout), "〔點字〕(unified)", num_preedit)
+      if neg_n=="" then
+        yield_c( arabic_indic_number(numberout), "〔阿拉伯文〕", num_preedit)
+        yield_c( extended_arabic_indic_number(numberout), "〔東阿拉伯文〕", num_preedit)
+        yield_c( devanagari_number(numberout), "〔天城文〕", num_preedit)
+      end
+
+      if (neg_n=="") then
+        if tonumber(numberout)==1 or tonumber(numberout)==0 then
+          yield_c( string.sub(numberout, -1), "〔二進位〕", num_preedit)
+        --- 浮點精度關係，二進制轉換運算中：
+        --- math.floor 極限是小數點後15位(小於16位，1.9999999999999999)
+        --- math.fmod 極限是小數點後13位(小於14位，1.99999999999999，14位開頭為偶數時除2是正確的，奇數則不正確)
+        elseif (string.len(numberout) < 14) then
+        --- （以下還是有錯誤！）等於大於9999999999999999（16位-1），lua中幾個轉換函數都會出錯，運算會不正確
+        -- elseif (tonumber(numberout) < 9999999999999999) then
+        -- elseif (string.len(numberout) < 16) then
+          yield_c( Dec2bin(numberout), "〔二進位〕", num_preedit)
+        else
+          yield_c( "bin", "（超過 14位 會有誤）〔二進位〕", num_preedit)
+          -- yield_c( "%b", "（數值超過 14位 可能會不正確）〔二進位〕", num_preedit)
+          -- yield_c( "", "（數值超過 16位-1 會不正確）〔二進位〕", num_preedit)
+        end
+
+        --- 整數庫限制：最大的64位元整數超過64位等同十進制2^63，超過則報錯，極限2^63-1，超過設定不顯示
+        if (tonumber(numberout) < 9223372036854775808) then
+        -- if (string.len(numberout) < 19) then
+          yield_c( string.format("%X",numberout), "〔十六進位〕", num_preedit)
+          yield_c( string.format("%x",numberout), "〔十六進位〕", num_preedit)
+          yield_c( string.format("%o",numberout), "〔八進位〕", num_preedit)
+        else
+          yield_c( "Hex", "（超過 2⁶³-1 報錯）〔十六進位〕", num_preedit)
+          yield_c( "hex", "（超過 2⁶³-1 報錯）〔十六進位〕", num_preedit)
+          yield_c( "oct", "（超過 2⁶³-1 報錯）〔八進位〕", num_preedit)
+        end
+      end
+
+    elseif (dot0~="") then
+      yield_c( neg_n_c .. purech_number(dot1..afterdot), "〔純中文〕", num_preedit)
+      yield_c( neg_n_s .. military_number(dot1..afterdot), "〔軍中〕", num_preedit)
+      yield_c( neg_n_b .. braille_c_number(dot1..afterdot), "〔點字〕(computer)", num_preedit)
+      -- yield_c( neg_n_b .. "⠼" .. braille_c_number(dot1..afterdot), "〔點字(一般)〕", num_preedit)
+      yield_c( neg_n_b .. "⠼" .. braille_u_number(dot1..afterdot), "〔點字〕(unified)", num_preedit)
+      if neg_n=="" then
+        yield_c( "٠" .. arabic_indic_number(dot1..afterdot), "〔阿拉伯文〕", num_preedit)
+        yield_c( "۰" .. extended_arabic_indic_number(dot1..afterdot), "〔東阿拉伯文〕", num_preedit)
+      end
+      return
+    elseif dot0=="" and dot1~="" then
+      if (string.len(numberout) < 2) then
+        yield_c( "元整", "〔純中文〕", num_preedit)
+      else
+        yield_c( neg_n_c .. purech_number(numberout..dot1..afterdot), "〔純中文〕", num_preedit)
+      end
+      yield_c( neg_n_s .. military_number(numberout..dot1..afterdot), "〔軍中〕", num_preedit)
+      yield_c( neg_n_b .. braille_c_number(numberout..dot1..afterdot), "〔點字〕(computer)", num_preedit)
+      -- yield_c( neg_n_b .. "⠼" .. braille_c_number(numberout..dot1..afterdot), "〔點字(一般)〕", num_preedit)
+      yield_c( neg_n_b .. "⠼" .. braille_u_number(numberout..dot1..afterdot), "〔點字〕(unified)", num_preedit)
+      if neg_n=="" then
+        yield_c( arabic_indic_number(numberout..dot1..afterdot), "〔阿拉伯文〕", num_preedit)
+        yield_c( extended_arabic_indic_number(numberout..dot1..afterdot), "〔東阿拉伯文〕", num_preedit)
+      end
+      return
+    end
+
+    return
+  end
+
+  -- local num_preedit = nil  -- 數字格式結束，清空 num_preedit 記憶
+
+-----------------------------
+
+  ::cal_input_label::
+
+  --- 計算機
+  -- local cal_input = string.match(input, env.prefix_s .. "([q(]?[q(]?[-r]?[%d.]+[-+*/^asrvxqw()][-+*/^asrvxqw().%d]*)$")
+  if cal_input then
+    local cal_input = string.gsub(cal_input, "a", "+")
+    local cal_input = string.gsub(cal_input, "s", "^")
+    local cal_input = string.gsub(cal_input, "r", "-")
+    local cal_input = string.gsub(cal_input, "v", "/")
+    local cal_input = string.gsub(cal_input, "x", "*")
+    local cal_input = string.gsub(cal_input, "q", "(")
+    local cal_input = string.gsub(cal_input, "w", ")")
+    local input_exp = string.gsub(cal_input, "^0+(%d)", "%1")
+    local input_exp = string.gsub(input_exp, "([-+*/^()])0+(%d)", "%1%2")
+    --會出 Bug -- local input_exp = string.gsub(input_exp, "(%d*%.%d*0)$", function(n) return string.format("%g",n) end)
+    --會出 Bug -- local input_exp = string.gsub(input_exp, "(%d*%.%d*0)([-+*/^()])", function(n, opr) return string.format("%g",n) .. opr end)
+    local input_exp = string.gsub(input_exp, "(%d*%.%d*0)$", function(n) return string.gsub(n,"0+$", "") end)  --去除小數點後末尾0
+    local input_exp = string.gsub(input_exp, "(%d*%.%d*0)([-+*/^()])", function(n, opr) return string.gsub(n,"0+$", "") .. opr end)  --去除小數點後末尾0
+    local input_exp = string.gsub(input_exp, "^%.", "0.")
+    local input_exp = string.gsub(input_exp, "%.%$", "")
+    local input_exp = string.gsub(input_exp, "%.([-+*/^()])", "%1")
+    local input_exp = string.gsub(input_exp, "([-+*/^()])%.", "%10.")
+    local cal_preedit = string.gsub(cal_input, "([-+*/^()])", " %1 ")
+
+    local cal_output = simple_calculator(input_exp)[1]
+    local output_exp = simple_calculator(input_exp)[2]
+    local s_output = simple_calculator(input_exp)[3]
+
+    local preedittext = env.prefix .. " " .. cal_preedit .. "\t 【計算機】"
+    if (string.sub(cal_output, 1,1)=="E" or string.sub(cal_output, 1,1)=="W") then
+      yield_c( "", cal_output.."〔結果〕", preedittext)  -- yield(cc_out_error)
+      yield_c( s_output, "〔 Waring 結果〕", preedittext)  -- yield(cc_out_shadow)
+      yield_c( output_exp .. "=" .. s_output, "〔 Waring 規格化算式〕", preedittext)  -- yield(cc_exp_error)
+    else
+      yield_c( cal_output, "〔結果〕", preedittext)  -- yield(cc_out)
+      -- if s_output~="" then
+      --   yield_c( s_output, "〔 Waring 結果〕", preedittext)  -- yield(cc_out_shadow)
+      -- end
+      yield_c( output_exp .. "=" .. cal_output, "〔規格化算式〕", preedittext)  -- yield(cc_exp)
+      -- yield_c( input_exp .. "=" .. cal_output, "〔規格化算式〕", preedittext)  -- yield(cc_exp)
+    end
+    -- if s_output~="" then
+    --   yield_c( s_output, "〔 Waring 結果〕", preedittext)  -- yield(cc_out_shadow)
+    -- end
+    yield_c( "", "※  會有浮點數誤差和錯誤；括號限兩層三堆；14位數限制", preedittext)  -- yield(cc_statement)
+    -- yield_c( "", "※  會有浮點數誤差和錯誤；括號限兩層；14位數限制", preedittext)
+    return
+  end
 
 -----------------------------
 -----------------------------
