@@ -1,5 +1,5 @@
 {
-  "name": "標點後方標註",
+  "name": "標點後方標註_注音和雙拼方案用（避〔〕。）",
   "segmentation": {
     "type": "mmseg",
     "dict": {
