@@ -10,6 +10,7 @@
 
 ----------------------------------------------------------------------------------------
 -- local utf8_sub = require("f_components/f_utf8_sub")
+local oscmd = require("p_components/p_oscmd")
 local run_open = require("p_components/p_run_open")
 -- local generic_open = require("p_components/p_generic_open")
 -- local run_pattern = require("p_components/p_run_pattern")
@@ -29,6 +30,7 @@ local function init(env)
   env.run_pattern = path .. "/lua/p_components/p_run_pattern.lua" or ""
   -- env.op_pattern = path .. "/lua/p_components/p_op_pattern.lua" or ""
   -- log.info("lua_custom_phrase: \'" .. env.textdict .. ".txt\' Initilized!")  -- 日誌中提示已經載入 txt 短語
+  env.oscmd = oscmd
   -- env.kp_pattern = {
   --   ["0"] = "0",
   --   ["1"] = "1",
@@ -299,7 +301,8 @@ local function processor(key, env)
   elseif seg:has_tag("mf_translator") and not string.match(c_input, env.prefix .. "['/;]") and string.match(c_input, env.prefix .. "j[a-z]+$") then  -- 開頭
     if key:repr() == "space" or key:repr() == "Return" or key:repr() == "KP_Enter" then
       local op_code = string.match(c_input, "^" .. env.prefix .. "j([a-z]+)$")
-      return run_open(context, c_input, caret_pos, op_code, env.run_pattern, "", "")
+      return run_open(context, c_input, caret_pos, op_code, env.run_pattern, "", "", env.oscmd)
+      -- return run_open(engine, context, c_input, caret_pos, op_code, env.run_pattern, "", "", env.oscmd)
     end
 
 -----------------------------------------------------------------------------
