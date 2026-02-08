@@ -25,21 +25,21 @@ end
 
 local function fullshape_number(t)
   if t == "" then return "" end
-  local format1 = "xlit|0123456789|０１２３４５６７８９|"
+  local format1 = "xlit|0123456789-|０１２３４５６７８９－|"
   local proj = convert_format(format1)
   return proj:apply(t)
 end
 
 local function math1_number(t)
   if t == "" then return "" end
-  local format1 = "xlit|0123456789|𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗|"
+  local format1 = "xlit|0123456789-|𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗−|"
   local proj = convert_format(format1)
   return proj:apply(t)
 end
 
 local function math2_number(t)
   if t == "" then return "" end
-  local format1 = "xlit|0123456789|𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡|"
+  local format1 = "xlit|0123456789-|𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡−|"
   local proj = convert_format(format1)
   return proj:apply(t)
 end
@@ -47,48 +47,54 @@ end
 local function circled1_number(t)
   if t == "" then return "" end
   local format1 = "xlit|0123456789|⓪①②③④⑤⑥⑦⑧⑨|"
-  local proj = convert_format(format1)
+  local format2 = "xform|-|−⃝|"  -- ㊀ -⃝ −︎⃝ ⊝ ⊖
+  local proj = convert_format(format1,format2)
   return proj:apply(t)
 end
 
 local function circled2_number(t)
   if t == "" then return "" end
   local format1 = "xlit|0123456789|🄋➀➁➂➃➄➅➆➇➈|"
-  local proj = convert_format(format1)
+  local format2 = "xform|-|−⃝|"  -- ㊀ -⃝ −︎⃝ ⊝ ⊖
+  local proj = convert_format(format1,format2)
   return proj:apply(t)
 end
 
 local function circled3_number(t)
   if t == "" then return "" end
   local format1 = "xlit|0123456789|⓿❶❷❸❹❺❻❼❽❾|"
-  local proj = convert_format(format1)
+  local format2 = "xform|-|⛔︎|"
+  local proj = convert_format(format1,format2)
   return proj:apply(t)
 end
 
 local function circled4_number(t)
   if t == "" then return "" end
   local format1 = "xlit|0123456789|🄌➊➋➌➍➎➏➐➑➒|"
-  local proj = convert_format(format1)
+  local format2 = "xform|-|⛔︎|"
+  local proj = convert_format(format1,format2)
   return proj:apply(t)
 end
 
 local function circled5_number(t)
   if t == "" then return "" end
   local format1 = "xlit|0123456789|Ⓞ㊀㊁㊂㊃㊄㊅㊆㊇㊈|"  --小寫「o」：ⓞ
-  local proj = convert_format(format1)
+  local format2 = "xform|-|負⃝|"  -- 負︎⃝
+  local proj = convert_format(format1,format2)
   return proj:apply(t)
 end
 
 local function paren_number(t)
   if t == "" then return "" end
   local format1 = "xlit|0123456789|⒪㈠㈡㈢㈣㈤㈥㈦㈧㈨|"  --大寫「o」：🄞
-  local proj = convert_format(format1)
+  local format2 = "xform|-|(負)|"
+  local proj = convert_format(format1,format2)
   return proj:apply(t)
 end
 
 local function purech_number(t)
   if t == "" then return "" end
-  local format1 = "xlit|0123456789.|〇一二三四五六七八九點|"
+  local format1 = "xlit|0123456789.-|〇一二三四五六七八九點負|"
   local proj = convert_format(format1)
   return proj:apply(t)
 end
@@ -102,42 +108,42 @@ end
 
 local function military_number(t)
   if t == "" then return "" end
-  local format1 = "xlit|0123456789.|洞么兩三四五六拐八勾點|"
+  local format1 = "xlit|0123456789.-|洞么兩三四五六拐八勾點槓|"
   local proj = convert_format(format1)
   return proj:apply(t)
 end
 
 local function little1_number(t)
   if t == "" then return "" end
-  local format1 = "xlit|0123456789.|⁰¹²³⁴⁵⁶⁷⁸⁹⋅|"
+  local format1 = "xlit|0123456789.-|⁰¹²³⁴⁵⁶⁷⁸⁹⋅⁻|"
   local proj = convert_format(format1)
   return proj:apply(t)
 end
 
 local function little2_number(t)
   if t == "" then return "" end
-  local format1 = "xlit|0123456789.|₀₁₂₃₄₅₆₇₈₉.|"
+  local format1 = "xlit|0123456789-|₀₁₂₃₄₅₆₇₈₉₋|"  --|.|
   local proj = convert_format(format1)
   return proj:apply(t)
 end
 
 local function mss_number(t)
   if t == "" then return "" end
-  local format1 = "xlit|0123456789.|𝟢𝟣𝟤𝟥𝟦𝟧𝟨𝟩𝟪𝟫.|"
+  local format1 = "xlit|0123456789-|𝟢𝟣𝟤𝟥𝟦𝟧𝟨𝟩𝟪𝟫−|"  --|.|
   local proj = convert_format(format1)
   return proj:apply(t)
 end
 
 local function mssb_number(t)
   if t == "" then return "" end
-  local format1 = "xlit|0123456789.|𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵.|"
+  local format1 = "xlit|0123456789-|𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵−|"  --|.|
   local proj = convert_format(format1)
   return proj:apply(t)
 end
 
 local function mm_number(t)
   if t == "" then return "" end
-  local format1 = "xlit|0123456789.|𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿.|"
+  local format1 = "xlit|0123456789-|𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿−|"  --|.|
   local proj = convert_format(format1)
   return proj:apply(t)
 end
@@ -165,7 +171,7 @@ end
 
 local function braille_c_number(t)
   if t == "" then return "" end
-  local format1 = "xlit|0123456789.|⠴⠂⠆⠒⠲⠢⠖⠶⠦⠔⠨|"
+  local format1 = "xlit|0123456789.-|⠴⠂⠆⠒⠲⠢⠖⠶⠦⠔⠨⠤|"
   local proj = convert_format(format1)
   return proj:apply(t)
 end
@@ -173,7 +179,8 @@ end
 local function braille_u_number(t)
   if t == "" then return "" end
   local format1 = "xlit|0123456789.|⠚⠁⠃⠉⠙⠑⠋⠛⠓⠊⠲|"
-  local proj = convert_format(format1)
+  local format2 = "xform|-|⠤⠼|"
+  local proj = convert_format(format1,format2)
   return proj:apply(t)
 end
 
@@ -181,34 +188,151 @@ end
 
 local function keycap_number(dn)
   if dn == "" then return "" end
-  dn = string.gsub(dn, "0", "0️⃣")
-  dn = string.gsub(dn, "1", "1️⃣")
-  dn = string.gsub(dn, "2", "2️⃣")
-  dn = string.gsub(dn, "3", "3️⃣")
-  dn = string.gsub(dn, "4", "4️⃣")
-  dn = string.gsub(dn, "5", "5️⃣")
-  dn = string.gsub(dn, "6", "6️⃣")
-  dn = string.gsub(dn, "7", "7️⃣")
-  dn = string.gsub(dn, "8", "8️⃣")
-  dn = string.gsub(dn, "9", "9️⃣")
-  return dn
+  --- 以下新的寫法
+  local n2keycap = {["0"]="0️⃣", ["1"]="1️⃣", ["2"]="2️⃣", ["3"]="3️⃣", ["4"]="4️⃣", ["5"] ="5️⃣", ["6"]="6️⃣", ["7"]="7️⃣", ["8"]="8️⃣", ["9"]="9️⃣", ["."]="．", ["-"]="➖"}  -- ⛔
+  local out_dn = ""
+  for w in string.gmatch(dn, ".") do
+    local w = n2keycap[w] or w
+    out_dn = out_dn .. w
+  end
+  return out_dn
+  -- --- 以下舊的寫法
+  -- dn = string.gsub(dn, "0", "0️⃣")
+  -- dn = string.gsub(dn, "1", "1️⃣")
+  -- dn = string.gsub(dn, "2", "2️⃣")
+  -- dn = string.gsub(dn, "3", "3️⃣")
+  -- dn = string.gsub(dn, "4", "4️⃣")
+  -- dn = string.gsub(dn, "5", "5️⃣")
+  -- dn = string.gsub(dn, "6", "6️⃣")
+  -- dn = string.gsub(dn, "7", "7️⃣")
+  -- dn = string.gsub(dn, "8", "8️⃣")
+  -- dn = string.gsub(dn, "9", "9️⃣")
+  -- dn = string.gsub(dn, "%.", "．")
+  -- return dn
 end
 
 ------------------------------------
 
 local function keycap_ns_number(dn)
   if dn == "" then return "" end
-  dn = string.gsub(dn, "0", "0⃣")
-  dn = string.gsub(dn, "1", "1⃣")
-  dn = string.gsub(dn, "2", "2⃣")
-  dn = string.gsub(dn, "3", "3⃣")
-  dn = string.gsub(dn, "4", "4⃣")
-  dn = string.gsub(dn, "5", "5⃣")
-  dn = string.gsub(dn, "6", "6⃣")
-  dn = string.gsub(dn, "7", "7⃣")
-  dn = string.gsub(dn, "8", "8⃣")
-  dn = string.gsub(dn, "9", "9⃣")
-  return dn
+  --- 以下新的寫法
+  local n2keycap_ns = {["0"]="0⃣", ["1"]="1⃣", ["2"]="2⃣", ["3"]="3⃣", ["4"]="4⃣", ["5"] ="5⃣", ["6"]="6⃣", ["7"]="7⃣", ["8"]="8⃣", ["9"]="9⃣", ["."]=".⃣", ["-"]="-⃣"}  -- -⃣ −⃣
+  local out_dn = ""
+  for w in string.gmatch(dn, ".") do
+    local w = n2keycap_ns[w] or w
+    out_dn = out_dn .. w
+  end
+  return out_dn
+  -- --- 以下舊的寫法
+  -- dn = string.gsub(dn, "0", "0⃣")
+  -- dn = string.gsub(dn, "1", "1⃣")
+  -- dn = string.gsub(dn, "2", "2⃣")
+  -- dn = string.gsub(dn, "3", "3⃣")
+  -- dn = string.gsub(dn, "4", "4⃣")
+  -- dn = string.gsub(dn, "5", "5⃣")
+  -- dn = string.gsub(dn, "6", "6⃣")
+  -- dn = string.gsub(dn, "7", "7⃣")
+  -- dn = string.gsub(dn, "8", "8⃣")
+  -- dn = string.gsub(dn, "9", "9⃣")
+  -- dn = string.gsub(dn, "%.", ".⃣")
+  -- return dn
+end
+
+------------------------------------
+
+local function emoji_number(dn)
+  if dn == "" then return "" end
+  --- 以下新的寫法
+  local n2emoji = {
+    [1] = {["0"]="🛎️", ["1"]="🪑", ["2"]="👂🏻", ["3"]="☂️", ["4"]="💩", ["5"] ="💃🏻", ["6"]="🐂", ["7"]="🌈", ["8"]="👨🏻", ["9"]="🥃", ["."]="⚡️", ["-"]="✂️"},
+    [2] = {["0"]="🕳️", ["1"]="💊", ["2"]="👥", ["3"]="☘️", ["4"]="🍀", ["5"] ="⭐️", ["6"]="🐮", ["7"]="🚩", ["8"]="🎱", ["9"]="🍺", ["."]="🔋", ["-"]="⛔️"},
+    [3] = {["0"]="🈳️", ["1"]="☝🏻️", ["2"]="✌🏻️", ["3"]="📐", ["4"]="☠️", ["5"] ="🖐🏻️", ["6"]="⛸️", ["7"]="🐧", ["8"]="🇧🇷", ["9"]="🥂", ["."]="💡", ["-"]="☢️"},
+    [4] = {["0"]="🥚", ["1"]="🥇", ["2"]="🎎", ["3"]="⛰️", ["4"]="👨‍👩‍👧‍👦", ["5"] ="🐯", ["6"]="✡️", ["7"]="🐔", ["8"]="🐙", ["9"]="🐶", ["."]="⚫", ["-"]="🚬"},
+    [5] = {["0"]="🔔", ["1"]="💺", ["2"]="🐰", ["3"]="🔱", ["4"]="🐹", ["5"] ="🤭", ["6"]="🪀", ["7"]="😭", ["8"]="🕷️", ["9"]="🦶🏻", ["."]="📍", ["-"]="📛"},
+                  }
+  local out_dn_random = ""
+  local out_dn_fixed = ""
+  for w in string.gmatch(dn, ".") do
+    local ranNumber = math.random(1, 5)
+    local w_r = n2emoji[ranNumber][w] or w  -- n2emoji[ranNumber] 如果為 nil 該條目會報錯！
+    local w = n2emoji[1][w] or w
+    out_dn_random = out_dn_random .. w_r
+    out_dn_fixed = out_dn_fixed .. w
+  end
+  return {out_dn_random, out_dn_fixed}
+  -- --- 以下舊的寫法
+  -- local out_dn_random = ""
+  -- for w in string.gmatch(dn, ".") do
+  --   local ranNumber = math.random(1, 5)
+  --   if ranNumber == 1 then
+  --     w = string.gsub(w, "0", "🛎️")  -- 🕳️🈳️🥚🔔  -- 🔕🎐🍳🧊🤡🃏🕛
+  --     w = string.gsub(w, "1", "🪑")  -- 💊☝🏻️🥇💺  -- 🏆👆🏻️💯🕐
+  --     w = string.gsub(w, "2", "👂🏻")  -- 👥✌🏻️🎎🐰  -- 🥈🥢👫🐇🦢🪿🎧♊️♓️🕑
+  --     w = string.gsub(w, "3", "☂️")  -- ☘️📐⛰️🔱  -- 🥉🏔️🗻🔺🔻🌂☔️⛱️🪭🧮🧄🌲🌳🌴🎄🕒
+  --     w = string.gsub(w, "4", "💩")  -- 🍀☠️👨‍👩‍👧‍👦🐹  -- 💀🧟⚰️👻🐁🐀🐭🧹🆗🔢🫟🕓
+  --     w = string.gsub(w, "5", "💃🏻")  -- ⭐️🖐🏻️🐯🤭  -- 🙈🙉🙊🐸🐢🈚️🔥🐅🥁🚫🪘🕔
+  --     w = string.gsub(w, "6", "🐂")  -- 🐮⛸️✡️🪀  -- 🔯🐄🐃🤙❄️🦬🛝🕕
+  --     w = string.gsub(w, "7", "🌈")  -- 🚩🐧🐔😭  -- 🕎🎰🐓🐤🐥🐣🏁🎈🩼🕖
+  --     w = string.gsub(w, "8", "👨🏻")  -- 🎱🇧🇷🐙🕷️  -- ☸️☯️🇵🇬🇵🇾🕸️🔈🔇🔉🔊📢📣♾️🕗
+  --     w = string.gsub(w, "9", "🥃")  -- 🍺🥂🐶🦶🏻  -- 🍶🍻🍾🍷🍸🐕🦮🐕‍🦺🐩👣🥟✅☑️✔️🪝🕘
+  --     w = string.gsub(w, "%.", "⚡️")  -- 🔋💡⚫📍  -- 🔘⏺️🖥️🏮🔦📌
+  --     w = string.gsub(w, "-", "✂️")  -- ⛔️☢️🚬📛  -- ➖⚛️🩻
+  --   elseif ranNumber == 2 then
+  --     w = string.gsub(w, "0", "🕳️")
+  --     w = string.gsub(w, "1", "💊")
+  --     w = string.gsub(w, "2", "👥")
+  --     w = string.gsub(w, "3", "☘️")
+  --     w = string.gsub(w, "4", "🍀")
+  --     w = string.gsub(w, "5", "⭐️")
+  --     w = string.gsub(w, "6", "🐮")
+  --     w = string.gsub(w, "7", "🚩")
+  --     w = string.gsub(w, "8", "🎱")
+  --     w = string.gsub(w, "9", "🍺")
+  --     w = string.gsub(w, "%.", "🔋")
+  --     w = string.gsub(w, "-", "⛔️")
+  --   elseif ranNumber == 3 then
+  --     w = string.gsub(w, "0", "🈳️")
+  --     w = string.gsub(w, "1", "☝🏻️")
+  --     w = string.gsub(w, "2", "✌🏻️")
+  --     w = string.gsub(w, "3", "📐")
+  --     w = string.gsub(w, "4", "☠️")
+  --     w = string.gsub(w, "5", "🖐🏻️")
+  --     w = string.gsub(w, "6", "⛸️")
+  --     w = string.gsub(w, "7", "🐧")
+  --     w = string.gsub(w, "8", "🇧🇷")
+  --     w = string.gsub(w, "9", "🥂")
+  --     w = string.gsub(w, "%.", "💡")
+  --     w = string.gsub(w, "-", "☢️")
+  --   elseif ranNumber == 4 then
+  --     w = string.gsub(w, "0", "🥚")
+  --     w = string.gsub(w, "1", "🥇")
+  --     w = string.gsub(w, "2", "🎎")
+  --     w = string.gsub(w, "3", "⛰️")
+  --     w = string.gsub(w, "4", "👨‍👩‍👧‍👦")
+  --     w = string.gsub(w, "5", "🐯")
+  --     w = string.gsub(w, "6", "✡️")
+  --     w = string.gsub(w, "7", "🐔")
+  --     w = string.gsub(w, "8", "🐙")
+  --     w = string.gsub(w, "9", "🐶")
+  --     w = string.gsub(w, "%.", "⚫")
+  --     w = string.gsub(w, "-", "🚬")
+  --   elseif ranNumber == 5 then
+  --     w = string.gsub(w, "0", "🔔")
+  --     w = string.gsub(w, "1", "💺")
+  --     w = string.gsub(w, "2", "🐰")
+  --     w = string.gsub(w, "3", "🔱")
+  --     w = string.gsub(w, "4", "🐹")
+  --     w = string.gsub(w, "5", "🤭")
+  --     w = string.gsub(w, "6", "🪀")
+  --     w = string.gsub(w, "7", "😭")
+  --     w = string.gsub(w, "8", "🕷️")
+  --     w = string.gsub(w, "9", "🦶🏻")
+  --     w = string.gsub(w, "%.", "📍")
+  --     w = string.gsub(w, "-", "📛")
+  --   end
+  --   out_dn_random = out_dn_random .. w
+  -- end
+  -- return {out_dn_random, ""}
 end
 
 ------------------------------------
@@ -415,6 +539,7 @@ return {
         little2_number = little2_number,
         braille_c_number = braille_c_number,
         braille_u_number = braille_u_number,
+        emoji_number = emoji_number,
         keycap_number = keycap_number,
         keycap_ns_number = keycap_ns_number,
         mss_number = mss_number,
