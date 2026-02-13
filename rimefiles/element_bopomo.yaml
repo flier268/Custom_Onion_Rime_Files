@@ -3,12 +3,15 @@
 # 『洋蔥』製作
 
 menu:
+### 選字鍵（有實質選字作用）
   # alternative_select_keys: "QAZWSXEDCRFV"
   # alternative_select_keys: "QAZWSXEDCV"
   # alternative_select_keys: "YHNUJMIKOL"
   # alternative_select_keys: "YUIOPHJKLNM"
+### 修改候選標籤（顯示作用，沒實質選字作用）
   # alternative_select_labels: [ 甲, 乙, 丙, 丁, 戊, 己, 庚, 辛, 壬, 癸 ]
-  # alternative_select_labels: [ ①, ②, ③, ④, ⑤, ⑥, ⑦, ⑧, ⑨ ]  # 修改候選標籤
+  # alternative_select_labels: ['⇧1', '⇧2', '⇧3', '⇧4', '⇧5', '⇧6', '⇧7', '⇧8', '⇧9', '⇧0']
+  # alternative_select_labels: [ ①, ②, ③, ④, ⑤, ⑥, ⑦, ⑧, ⑨ ]
   # alternative_select_labels: [ 1, 2, 3, 4, 5, 6 ]
   # alternative_select_labels: [ 'QY', 'AH', 'ZN', 'WU', 'SJ', 'XM', 'EI' ,'DK', 'CO' ]
   # alternative_select_labels: [ 'QY', 'AH', 'ZN', 'WU', 'SJ', 'XM' ]
@@ -20,7 +23,8 @@ menu:
   # alternative_select_labels: [ QY₁, AH₂, ZN₃, WU₄, SJ₅, XM₆ ]
   # alternative_select_labels: [ QY, AH, ZN, WU, SJ, XM ]
   alternative_select_labels: [ 𝚀𝚈, 𝙰𝙷, 𝚉𝙽, 𝚆𝚄, 𝚂𝙹, 𝚇𝙼 ]  # 強制等寬體
-  page_size: 6
+### 選單每頁顯示個數（如上方有設選字鍵，兩者個數需相同，不同會有 bug！）
+  page_size: 6 #10
 
 
 key_binder:
@@ -73,13 +77,6 @@ key_binder:
     - {accept: Shift+space, send: Page_Down, when: has_menu} #選字時「Shift」+「空白鍵」翻頁。 #send: Right #send: Down
     - {accept: Shift+I, send: Page_Up, when: has_menu}
     - {accept: Shift+K, send: Page_Down, when: has_menu}
-#右邊選字
-    - {accept: Shift+Y, send: Control+1, when: has_menu}
-    - {accept: Shift+H, send: Control+2, when: has_menu}
-    - {accept: Shift+N, send: Control+3, when: has_menu}
-    - {accept: Shift+U, send: Control+4, when: has_menu}
-    - {accept: Shift+J, send: Control+5, when: has_menu}
-    - {accept: Shift+M, send: Control+6, when: has_menu}
 #左邊選字
     - {accept: Shift+Q, send: Control+1, when: has_menu}
     - {accept: Shift+A, send: Control+2, when: has_menu}
@@ -87,6 +84,35 @@ key_binder:
     - {accept: Shift+W, send: Control+4, when: has_menu}
     - {accept: Shift+S, send: Control+5, when: has_menu}
     - {accept: Shift+X, send: Control+6, when: has_menu}
+#右邊選字
+    - {accept: Shift+Y, send: Control+1, when: has_menu}
+    - {accept: Shift+H, send: Control+2, when: has_menu}
+    - {accept: Shift+N, send: Control+3, when: has_menu}
+    - {accept: Shift+U, send: Control+4, when: has_menu}
+    - {accept: Shift+J, send: Control+5, when: has_menu}
+    - {accept: Shift+M, send: Control+6, when: has_menu}
+# #「shift」+「數字」選字（Mac）
+#     - { accept: Shift+exclam, send: KP_1, when: has_menu }
+#     - { accept: Shift+at, send: KP_2, when: has_menu }
+#     - { accept: Shift+numbersign, send: KP_3, when: has_menu }
+#     - { accept: Shift+dollar, send: KP_4, when: has_menu }
+#     - { accept: Shift+percent, send: KP_5, when: has_menu }
+#     - { accept: Shift+asciicircum, send: KP_6, when: has_menu }
+#     - { accept: Shift+ampersand, send: KP_7, when: has_menu }
+#     - { accept: Shift+asterisk, send: KP_8, when: has_menu }
+#     - { accept: Shift+parenleft, send: KP_9, when: has_menu }
+#     - { accept: Shift+parenright, send: KP_0, when: has_menu }
+# #「shift」+「數字」選字（Win）
+#     - { accept: Shift+1, send: KP_1, when: has_menu }
+#     - { accept: Shift+2, send: KP_2, when: has_menu }
+#     - { accept: Shift+3, send: KP_3, when: has_menu }
+#     - { accept: Shift+4, send: KP_4, when: has_menu }
+#     - { accept: Shift+5, send: KP_5, when: has_menu }
+#     - { accept: Shift+6, send: KP_6, when: has_menu }
+#     - { accept: Shift+7, send: KP_7, when: has_menu }
+#     - { accept: Shift+8, send: KP_8, when: has_menu }
+#     - { accept: Shift+9, send: KP_9, when: has_menu }
+#     - { accept: Shift+0, send: KP_0, when: has_menu }
 ### 空白鍵 ###
     - {accept: space, send: Return, when: paging} #方向鍵選字時，space直接上屏（避免被一聲空格影響）
     # - {accept: space, send: Page_Down, when: paging} #方向鍵選字時，space翻頁（上條遮屏需開啟，否則「=」+「符號」會誤按）
