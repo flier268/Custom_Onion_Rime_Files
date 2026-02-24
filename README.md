@@ -1,4 +1,4 @@
-# 電腦 Rime 洋蔥方案（注音、雙拼、拼音、形碼）
+# 電腦 Rime 洋蔥方案（注音、雙拼、拼音）
 
 ####  ※ 請勿使用於商業營利相關行為
 ####  ※ Commercial use is prohibited
@@ -59,7 +59,7 @@
   > |音碼類|形碼類|
   > |:---|:---|
   > |注音（[純注音](https://github.com/oniondelta/Onion_Rime_Files/wiki/%E3%80%8E-%E6%B3%A8%E9%9F%B3-%E6%B4%8B%E8%94%A5-%E7%B4%94%E6%B3%A8%E9%9F%B3-%E7%89%88-%E3%80%8F%E6%96%B9%E6%A1%88%E8%AA%AA%E6%98%8E)、[plus](https://github.com/oniondelta/Onion_Rime_Files/wiki/%E3%80%8E-%E6%B3%A8%E9%9F%B3-%E6%B4%8B%E8%94%A5-plus-%E7%89%88-%E3%80%8F%E6%96%B9%E6%A1%88%E8%AA%AA%E6%98%8E)、[mix-in](https://github.com/oniondelta/Onion_Rime_Files/wiki/%E3%80%8E-%E6%B3%A8%E9%9F%B3-%E6%B4%8B%E8%94%A5-mixin-%E7%89%88-%E3%80%8F%E6%96%B9%E6%A1%88%E8%AA%AA%E6%98%8E)）|形碼（[單出](https://github.com/oniondelta/Onion_Rime_Files/wiki/%E3%80%8E-%E6%B4%8B%E8%94%A5%E7%89%88-%E5%BD%A2%E7%A2%BC-%E5%96%AE%E5%87%BA-%E7%89%88-%E3%80%8F%E6%96%B9%E6%A1%88%E8%AA%AA%E6%98%8E)、[plus](https://github.com/oniondelta/Onion_Rime_Files/wiki/%E3%80%8E-%E6%B4%8B%E8%94%A5%E7%89%88-%E5%BD%A2%E7%A2%BC-plus-%E7%89%88-%E3%80%8F%E6%96%B9%E6%A1%88%E8%AA%AA%E6%98%8E)、[mix-in](https://github.com/oniondelta/Onion_Rime_Files/wiki/%E3%80%8E-%E6%B4%8B%E8%94%A5%E7%89%88-%E5%BD%A2%E7%A2%BC-mixin-%E7%89%88-%E3%80%8F%E6%96%B9%E6%A1%88%E8%AA%AA%E6%98%8E)）|
-  > |雙拼（[洋蔥雙拼](https://github.com/oniondelta/Onion_Rime_Files/wiki/%E3%80%8E-%E6%B3%A8%E9%9F%B3-%E6%B4%8B%E8%94%A5-%E9%9B%99%E6%8B%BC-%E7%89%88-%E3%80%8F%E6%96%B9%E6%A1%88%E8%AA%AA%E6%98%8E)）||<!--行列（[30](https://github.com/oniondelta/Onion_Rime_Files/wiki/%E3%80%8E-%E6%B4%8B%E8%94%A5%E7%89%88-%E8%A1%8C%E5%88%9730-%E3%80%8F%E6%96%B9%E6%A1%88%E8%AA%AA%E6%98%8E)、[10](https://github.com/oniondelta/Onion_Rime_Files/wiki/%E3%80%8E-%E6%B4%8B%E8%94%A5%E7%89%88-%E8%A1%8C%E5%88%9710-%E3%80%8F%E6%96%B9%E6%A1%88%E8%AA%AA%E6%98%8E)）>
+  > |雙拼（[洋蔥雙拼](https://github.com/oniondelta/Onion_Rime_Files/wiki/%E3%80%8E-%E6%B3%A8%E9%9F%B3-%E6%B4%8B%E8%94%A5-%E9%9B%99%E6%8B%BC-%E7%89%88-%E3%80%8F%E6%96%B9%E6%A1%88%E8%AA%AA%E6%98%8E)）|行列（[30](https://github.com/oniondelta/Onion_Rime_Files/wiki/%E3%80%8E-%E6%B4%8B%E8%94%A5%E7%89%88-%E8%A1%8C%E5%88%9730-%E3%80%8F%E6%96%B9%E6%A1%88%E8%AA%AA%E6%98%8E)、[10](https://github.com/oniondelta/Onion_Rime_Files/wiki/%E3%80%8E-%E6%B4%8B%E8%94%A5%E7%89%88-%E8%A1%8C%E5%88%9710-%E3%80%8F%E6%96%B9%E6%A1%88%E8%AA%AA%E6%98%8E)）|
   > |拼音（[mix-in](https://github.com/oniondelta/Onion_Rime_Files/wiki/%E3%80%8E-%E5%9C%B0%E7%90%83%E6%8B%BC%E9%9F%B3-%E6%B4%8B%E8%94%A5-mixin-%E7%89%88-%E3%80%8F%E6%96%B9%E6%A1%88%E8%AA%AA%E6%98%8E)）||
   > 
   > 掛接方案：
@@ -97,7 +97,7 @@
 
 - 開啟『電腦RIME方案_{日期}』資料夾，各個方案所需文件，已放置於『方案名稱』資料夾。
 
-- 選取欲使用方案，內含文件通通放入『Rime』用戶設定資料夾，如已有『opencc』資料夾，勿整個覆蓋，移動『opencc』裡面文件過去，無則整個『opencc』移過去。最後按「重新部署」完成！
+- 選取欲使用方案，內含文件通通放入『Rime』用戶設定資料夾，如已有『opencc』資料夾，勿整個覆蓋，移動『opencc』裡面文件過去，無則整個『opencc』移過去。
 
   > ※ 別放錯資料夾，反饋有人放錯放到程式預設方案資料夾！有些方案會因 lua 無法執行產生 Bug。
   > 
@@ -110,6 +110,10 @@
   > ~/.config/fcitx/rime  ( Linux )
   > ~/.local/share/fcitx5/rime  ( Linux )
   > ```
+
+- 非必要但推薦：Mac 和 Win 系統可將『其他』資料夾內之相應系統『外觀設定檔』： 「squirrel.custom.yaml」或「weasel.custom.yaml」置入『Rime』用戶設定資料夾，較符合這邊方案設定。
+
+- 最後按「重新部署」完成！
 
 ## 主程式、核心、掛件之版本問題
 
@@ -230,15 +234,21 @@
   
   #### ![image](https://raw.githubusercontent.com/oniondelta/Onion_Rime_Files/main/img/bpmf_mixin_4_keyboard.png)
   
-- 注音洋蔥版選字鍵位
+- 注音洋蔥版選字鍵位（8X2）（預設）
+
+  #### <img src="https://github.com/user-attachments/assets/8947e1a9-106c-4f16-95c6-0361d4130a78" width = "595" alt="image" /><br>
+
+- 注音洋蔥版選字鍵位（6X2）
 
   #### <img src="https://user-images.githubusercontent.com/54584047/236190921-a2c86863-ed81-4a28-ae37-07566aa9c3a9.png" width = "595" alt="image" /><br>
 
-<!--
+- 注音洋蔥版選字鍵位（8X1）
+
+  #### <img src="https://github.com/user-attachments/assets/759b1d86-522e-4ae8-87bb-1a8ad486da1f" width = "595" alt="image" /><br>
+
 - 行列１０（洋蔥版）鍵位
 
   #### <img src="https://github.com/oniondelta/Onion_Rime_Files/blob/main/img/array10_keyboard.png" width = "595" alt="image" /><br>
--->
 
 ## 贊助 Donate
 

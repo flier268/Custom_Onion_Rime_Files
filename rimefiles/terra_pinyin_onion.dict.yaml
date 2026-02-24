@@ -135,7 +135,7 @@
 #    詞句中，「睪」臺灣字典只有發音「gao1」，但日常常發「gao3」，故全都補齊「gao1」「gao3」。
 #    詞句中，「框」「眶」臺灣字典只有發音「kuang1」，沒有「kuang4」發音，故只保留「kuang1」發音。
 #    詞句中，「紮」臺灣字典發音為「za1」和「zha2」，但大陸字典有「zha1」，由於發音相近，故「za1」和「zha1」相互補齊，「zha2」語意不同，故不補。譯音人名則補齊「za1」「zha1」「zha2」。
-#    詞句中，「軋」除語意為狀聲詞「ga2」「ya4」或特殊語意等，皆補齊「ya4」「ga1」「ga2」「zha2」。
+#    詞句中，「軋」除語意為狀聲詞「ga2」「ya4」或特殊語意等，皆補齊「ya4」「ga1」「ga2」「zha2」，「ga1」詞頻設為80%。
 #    詞句中，「召」發音為「zhao4」「shao4」，兩岸皆無「zhao1」該發音，但日常常發，故標準為「zhao4」時補齊「zhao4」「zhao1」。
 #    詞句中，「町」發音「ding1」和「ting3」語意有差，但「ding1」日常常發，故皆補齊「ding1」「ting3」。
 #    詞句中，「嵌」語意為嵌入時，臺灣字典發音為「qian1」，對岸為「qian4」，日常皆常用，且「kan3」也常誤發此音，故語意為嵌入時，補齊「qian1」「qian4」「kan3」。
@@ -187,6 +187,7 @@
 #    詞句中，「惋」臺灣標準為「wan4」，大陸標準為「wan3」，日常易混，故皆補齊「wan4」「wan3」。
 #    詞句中，「頊」臺灣標準為「xu4」，大陸標準為「xu1」，日常易混，故全都補齊「xu4」「xu1」。
 #    詞句中，「蹈」臺灣標準為「dao4」，大陸標準為「dao3」，日常易混，故全都補齊「dao4」「dao3」。
+#    詞句中，「巍」臺灣標準為「wei2」，大陸標準為「wei1」，日常易混，故全都補齊「wei2」「wei1」。
 #    詞句中，「肘」臺灣標準為「zhou3」，日常發音常會誤發為「zhou2」，故皆補齊「zhou3」「zhou2」，後者詞頻設為80%。
 #    詞句中，「蕾」臺灣標準為「lei3」，日常發音常會誤發為「lei2」，，故皆補齊「lei3」「lei2」，後者詞頻設為80%。
 #    詞句中，「炔」臺灣標準為「que1」，日常發音常會發「jue2」，故皆補齊「que1」「jue2」。
@@ -205,6 +206,7 @@
 #    詞句中，「遍」臺灣字典讀音為「bian4」，語音為「pian4」，故皆補齊「bian4」「pian4」。
 #    詞句中，「癬」臺灣字典讀音為「xian3」，語音為「xuan3」，故皆補齊「xian3」「xuan3」，後者詞頻設為3%。
 #    詞句中，「鑿」臺灣字典讀音為「zuo4」，語音為「zao2」，故皆補齊「zuo4」「zao2」。
+#    詞句中，「豉」臺灣字典讀音為「shi4」，語音為「chi3」，故皆補齊「shi4」「chi3」。
 #    詞句中，「酪」臺灣字典讀音為「luo4」，語音為「lao4」，除「優酪乳」「健酪」之「酪」只標註「luo4」外，其他皆補齊「luo4」「lao4」。
 #    詞句中，「血」臺灣字典語音為「xie3」，讀音為「xue4」，故皆補齊「xie3」「xue4」。
 #    詞句中，「誰」臺灣字典語音為「shei2」，讀音為「shui2」，故皆補齊「shei2」[shui2]。
@@ -225,6 +227,7 @@
 #    詞句中，「誼」皆補齊「yi4」「yi2」。
 #    詞句中，「儲」皆補齊「chu2」「chu3」。
 #    詞句中，「訥」皆補齊「ne4」「na4」。
+#    詞句中，「禧」皆補齊「xi1」「xi3」。
 #    詞句中，「檔」皆補齊「dang3」「dang4」。
 #    詞句中，「孿」皆補齊「luan2」「lvan2」。
 #    詞句中，「穹」皆補齊「qiong1」「qiong2」。
@@ -3635,6 +3638,25 @@ min_phrase_weight: 100
 员	yun4	0%
 贸	mou4	1%
 砟	zuo4	1%
+囸	mi4	0%
+惴	chuan3	0%
+惴	gua4	0%
+愀	qiu4	0%
+愢	xi3	0%
+憚	da2	0%
+憚	chan3	0%
+惮	da2	0%
+惮	chan3	0%
+憮	wu2	0%
+怃	wu2	0%
+憧	zhuang4	0%
+懊	yu4	0%
+㤇	wu4	0%
+# 㤇	fo2	0%
+# 㤇	yu4	0%
+輗	yi4	0%
+𫐐	yi4	0%
+濯	shuo4	0%
 ##### @@201912 比對教育部相關字詞典檔所新增（重編國語詞典？） #####
 丁	zheng1	1%
 丂	kao3	1%
@@ -4084,7 +4106,7 @@ min_phrase_weight: 100
 婐	e3	1%
 寀	cai3	1%
 屠	chu2	1%
-崢	cheng2	1%
+崢	cheng2	14%
 帴	can2	1%
 庳	bei1	1%
 弸	peng2	1%
@@ -4924,7 +4946,7 @@ min_phrase_weight: 100
 齞	yan3	1%
 囀	zhuan3	1%
 囁	zhe2	1%
-巍	wei2	1%
+巍	wei2
 爚	yao4	1%
 瓓	lan2	1%
 籔	shu4	1%
@@ -57609,7 +57631,7 @@ min_phrase_weight: 100
 不豐不殺	bu4 feng1 bu4 sha1
 不賢都頭	bu4 xian2 du1 tou2
 不起訴處分	bu4 qi3 su4 chu3 fen4
-不起訴處分	bu4 qi3 su4 chu4 fen4
+不起訴處分	bu4 qi3 su4 chu3 fen1
 不足回旋	bu4 zu2 hui2 xuan2
 不足數	bu4 zu2 shu4
 不足為奇	bu4 zu2 wei2 qi2
@@ -60057,6 +60079,7 @@ min_phrase_weight: 100
 便宜沒好貨	pian2 yi2 mei2 hao3 huo4
 便宜無好貨	pian2 yi2 wu2 hao3 huo4
 便宜處分	bian4 yi2 chu3 fen4
+便宜處分	bian4 yi2 chu3 fen1
 便宜處置	bian4 yi2 chu3 zhi4
 便宜處置	bian4 yi2 chu4 zhi4
 便宜行事	bian4 yi2 xing2 shi4
@@ -60185,6 +60208,7 @@ min_phrase_weight: 100
 保保	bao3 bao3
 保健操	bao3 jian4 cao1
 保全處分	bao3 quan2 chu3 fen4
+保全處分	bao3 quan2 chu3 fen1
 保加利亞共和國	bao3 jia1 li4 ya3 gong4 he2 guo2
 保加利亞共和國	bao3 jia1 li4 ya4 gong4 he2 guo2
 保叔塔	bao3 shu2 ta3
@@ -60195,6 +60219,7 @@ min_phrase_weight: 100
 保增長	bao3 zeng1 zhang3
 保安局局長	bao3 an1 ju2 ju2 zhang3
 保安處分	bao3 an1 chu3 fen4
+保安處分	bao3 an1 chu3 fen1
 保定地區	bao3 ding4 di4 qu1
 保寧縣	bao3 ning2 xian4
 保山地區	bao3 shan1 di4 qu1
@@ -60812,6 +60837,7 @@ min_phrase_weight: 100
 假藉	jia3 jie4
 假藥	jia3 yao4
 假處分	jia3 chu3 fen4
+假處分	jia3 chu3 fen1
 假裝	jia3 zhuang1
 假言三段論	jia3 yan2 san1 duan4 lun4
 假言命題	jia3 yan2 ming4 ti2
@@ -65444,6 +65470,7 @@ min_phrase_weight: 100
 印度黃檀	yin4 du4 huang2 tan2
 印把子	yin4 ba4 zi5
 印模	yin4 mo2
+印模	yin4 mu2
 印泥	yin4 ni2
 印相	yin4 xiang4
 印相箱	yin4 xiang4 xiang1
@@ -66036,6 +66063,7 @@ min_phrase_weight: 100
 另一種	ling4 yi1 zhong3
 另存為	ling4 cun2 wei4
 另巍巍	ling4 wei2 wei2
+另巍巍	ling4 wei1 wei1
 另搭架子	ling4 da1 jia4 zi5
 另當別論	ling4 dang1 bie2 lun4
 另眼相待	ling4 yan3 xiang1 dai4
@@ -74421,6 +74449,7 @@ min_phrase_weight: 100
 崛地而起	jue2 di4 er2 qi3
 崛強	jue2 jiang4
 崢巆	zheng1 ying2
+崢巆	cheng2 ying2
 崧生嶽降	song1 sheng1 yue4 jiang4
 崩倒	beng1 dao3
 崩落	beng1 luo4
@@ -74494,10 +74523,13 @@ min_phrase_weight: 100
 巍巍	wei2 wei2
 巍巍	wei1 wei1
 巍巍蕩蕩	wei2 wei2 dang4 dang4
+巍巍蕩蕩	wei1 wei1 dang4 dang4
 巍然	wei2 ran2
 巍然	wei1 ran2
 巍然屹立	wei2 ran2 yi4 li4
+巍然屹立	wei1 ran2 yi4 li4
 巍科	wei2 ke1
+巍科	wei1 ke1
 巔峰負載	dian1 feng1 fu4 zai4
 巖居穴處	yan2 ju1 xue4 chu3
 巖徼	yan2 jiao4
@@ -75994,6 +76026,8 @@ min_phrase_weight: 100
 強制罪	qiang3 zhi4 zui4
 強制處分	qiang3 zhi4 chu3 fen4
 強制處分	qiang2 zhi4 chu3 fen4
+強制處分	qiang3 zhi4 chu3 fen1
+強制處分	qiang2 zhi4 chu3 fen1
 強制認領	qiang3 zhi4 ren4 ling3
 強制辯護	qiang3 zhi4 bian4 hu4
 強力	qiang2 li4
@@ -78350,6 +78384,8 @@ min_phrase_weight: 100
 懲惡獎善	cheng3 e4 jiang3 shan4	80%
 懲戒處分	cheng2 jie4 chu3 fen4
 懲戒處分	cheng3 jie4 chu3 fen4	80%
+懲戒處分	cheng2 jie4 chu3 fen1
+懲戒處分	cheng3 jie4 chu3 fen1	80%
 懲處	cheng2 chu3
 懲處	cheng3 chu3	80%
 懵憒	meng2 kui4
@@ -83997,6 +84033,7 @@ min_phrase_weight: 100
 昏頭轉向	hun1 tou2 zhuan3 xiang4
 易傳	yi4 zhuan4
 易刑處分	yi4 xing2 chu3 fen4
+易刑處分	yi4 xing2 chu3 fen1
 易加卡	yi4 jia1 ka3
 易取得	yi4 qu3 de2
 易地	yi4 di4
@@ -89048,7 +89085,9 @@ min_phrase_weight: 100
 泄露	xie4 lu4
 泄露	xie4 lou4
 洩露天機	xie4 lu4 tian1 ji1
+洩露天機	xie4 lou4 tian1 ji1
 泄露天機	xie4 lu4 tian1 ji1
+泄露天機	xie4 lou4 tian1 ji1
 泉脈	quan2 mai4
 泊松分佈	bo2 song1 fen1 bu4
 泊松分佈	po4 song1 fen1 bu4
@@ -96281,6 +96320,7 @@ min_phrase_weight: 100
 矯枉過直	jiao3 wang3 guo4 zhi2
 矯正	jiao3 zheng4
 矯正處分	jiao3 zheng4 chu3 fen4
+矯正處分	jiao3 zheng4 chu3 fen1
 矯正透鏡	jiao3 zheng4 tou4 jing4
 矯治	jiao3 zhi4
 矯激奇詭	jiao3 ji1 qi2 gui3
@@ -99669,6 +99709,7 @@ min_phrase_weight: 100
 緊急應變	jin3 ji2 ying4 bian4
 緊急疏散	jin3 ji2 shu1 san4
 緊急處分	jin3 ji2 chu3 fen4
+緊急處分	jin3 ji2 chu3 fen1
 緊急避難權	jin3 ji2 bi4 nan4 quan2
 緊急避難行為	jin3 ji2 bi4 nan4 xing2 wei2
 緊湊渺子線圈	jin3 cou4 miao3 zi3 xian4 quan1
@@ -104517,6 +104558,7 @@ min_phrase_weight: 100
 處事	chu3 shi4
 處事原則	chu3 shi4 yuan2 ze2
 處分	chu3 fen4
+處分	chu3 fen1
 處刑	chu3 xing2
 處堂燕雀	chu4 tang2 yan4 que4
 處境	chu3 jing4
@@ -105208,6 +105250,7 @@ min_phrase_weight: 100
 行政立法	xing2 zheng4 li4 fa3
 行政管理	xing2 zheng4 guan3 li3
 行政處分	xing2 zheng4 chu3 fen4
+行政處分	xing2 zheng4 chu3 fen1
 行政裁量權	xing2 zheng4 cai2 liang2 quan2
 行政訴訟	xing2 zheng4 su4 song4
 行政訴願	xing2 zheng4 su4 yuan4
@@ -117108,6 +117151,7 @@ min_phrase_weight: 100
 鴻漸	hong2 jian4
 鴻爪	hong2 zhao3
 鴻禧	hong2 xi1
+鴻禧	hong2 xi3
 鴻蒙	hong2 meng2
 鴻運當頭	hong2 yun4 dang1 tou2
 鴻都	hong2 du1
@@ -117787,4 +117831,4 @@ min_phrase_weight: 100
 𣝓弧	yan3 hu2
 𣝓絲	yan3 si1
 𧑗蝦	ning2 xia1
-##### @結束 END - 117790 #####
+##### @結束 END - 117834 #####

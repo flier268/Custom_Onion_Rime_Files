@@ -4,7 +4,7 @@
 schema:
   schema_id: bo_mixin2
   name: "☆注音(洋蔥mix-in版 2 )☆〔小大平片韓〕"
-  version: "202512"
+  version: "202602"
   author:
     - 『洋蔥』
   description: |
@@ -712,7 +712,14 @@ punctuator:
 key_binder:
   import_preset: default
   bindings:
-    __include: element_bopomo:/key_binder
+    ### 以下舊的寫法（需去除「element_bopomo:/key_binder」中的「__append:」） ###
+    # __include: element_bopomo:/key_binder
+    # __patch: element_bopomo:/key_binder_plus
+    # __append:
+    ### 以下新的寫法 ###
+    __patch:
+      - element_bopomo:/key_binder
+      - element_bopomo:/key_binder_plus
 
 editor:
   bindings:
