@@ -46,12 +46,12 @@ menu:
 ### 修改候選標籤（以下英文為：強制等寬體）
   ## （跳過「Shfit+Z」）
   # alternative_select_labels: [ 𝚀𝚈, 𝙰𝙷, 𝚆𝙽, 𝚂𝚄, 𝚇𝙹, 𝙴𝙼, 𝙳𝙸, 𝙲𝙺 ]
-  alternative_select_labels: [ 𝟷𝚀𝚈, 𝟸𝙰𝙷, 𝟹𝚆𝙽, 𝟺𝚂𝚄, 𝟻𝚇𝙹, 𝟼𝙴𝙼, 𝟽𝙳𝙸, 𝟾𝙲𝙺 ]
+  # alternative_select_labels: [ 𝟷𝚀𝚈, 𝟸𝙰𝙷, 𝟹𝚆𝙽, 𝟺𝚂𝚄, 𝟻𝚇𝙹, 𝟼𝙴𝙼, 𝟽𝙳𝙸, 𝟾𝙲𝙺 ]
   ## （原始順序）
   # alternative_select_labels: [ 𝚀𝚈, 𝙰𝙷, 𝚉𝙽, 𝚆𝚄, 𝚂𝙹, 𝚇𝙼, 𝙴𝙸, 𝙳𝙺 ]
   # alternative_select_labels: [ ¹𝚀𝚈, ²𝙰𝙷, ³𝚉𝙽, ⁴𝚆𝚄, ⁵𝚂𝙹, ⁶𝚇𝙼, ⁷𝙴𝙸, ⁸𝙳𝙺 ]
   # alternative_select_labels: [ 𝟙𝚀𝚈, 𝟚𝙰𝙷, 𝟛𝚉𝙽, 𝟜𝚆𝚄, 𝟝𝚂𝙹, 𝟞𝚇𝙼, 𝟟𝙴𝙸, 𝟠𝙳𝙺 ]
-  # alternative_select_labels: [ 𝟷𝚀𝚈, 𝟸𝙰𝙷, 𝟹𝚉𝙽, 𝟺𝚆𝚄, 𝟻𝚂𝙹, 𝟼𝚇𝙼, 𝟽𝙴𝙸, 𝟾𝙳𝙺 ]
+  alternative_select_labels: [ 𝟷𝚀𝚈, 𝟸𝙰𝙷, 𝟹𝚉𝙽, 𝟺𝚆𝚄, 𝟻𝚂𝙹, 𝟼𝚇𝙼, 𝟽𝙴𝙸, 𝟾𝙳𝙺 ]
   # alternative_select_labels: [ 𝟷.𝚀𝚈, 𝟸.𝙰𝙷, 𝟹.𝚉𝙽, 𝟺.𝚆𝚄, 𝟻.𝚂𝙹, 𝟼.𝚇𝙼, 𝟽.𝙴𝙸, 𝟾.𝙳𝙺 ]
   # alternative_select_labels: [ "⌃𝟷 𝚀 𝚈", "⌃𝟸 𝙰 𝙷", "⌃𝟹 𝚉 𝙽", "⌃𝟺 𝚆 𝚄", "⌃𝟻 𝚂 𝙹", "⌃𝟼 𝚇 𝙼", "⌃𝟽 𝙴 𝙸", "⌃𝟾 𝙳 𝙺" ]
 ### 選單每頁顯示個數
@@ -328,26 +328,26 @@ key_binder_plus:
     - {accept: Shift+V, send: Home, when: composing}
     - {accept: Shift+B, send: End, when: composing}
 #其他快捷鍵翻頁
-    # - {accept: Shift+C, send: Page_Up, when: has_menu}
-    - {accept: Shift+Z, send: Page_Up, when: has_menu}
+    - {accept: Shift+C, send: Page_Up, when: has_menu}
+    # - {accept: Shift+Z, send: Page_Up, when: has_menu}
     - {accept: Shift+space, send: Page_Down, when: has_menu} #選字時「Shift」+「空白鍵」翻頁。 #send: Right #send: Down
 #左邊選字（「Control+」不要換成「KP_」，特殊功能集【數字】選字會有問題）
-    # - {accept: Shift+Q, send: Control+1, when: has_menu}
-    # - {accept: Shift+A, send: Control+2, when: has_menu}
-    # - {accept: Shift+Z, send: Control+3, when: has_menu}
-    # - {accept: Shift+W, send: Control+4, when: has_menu}
-    # - {accept: Shift+S, send: Control+5, when: has_menu}
-    # - {accept: Shift+X, send: Control+6, when: has_menu}
-    # - {accept: Shift+E, send: Control+7, when: has_menu}
-    # - {accept: Shift+D, send: Control+8, when: has_menu}
     - {accept: Shift+Q, send: Control+1, when: has_menu}
     - {accept: Shift+A, send: Control+2, when: has_menu}
-    - {accept: Shift+W, send: Control+3, when: has_menu}
-    - {accept: Shift+S, send: Control+4, when: has_menu}
-    - {accept: Shift+X, send: Control+5, when: has_menu}
-    - {accept: Shift+E, send: Control+6, when: has_menu}
-    - {accept: Shift+D, send: Control+7, when: has_menu}
-    - {accept: Shift+C, send: Control+8, when: has_menu}
+    - {accept: Shift+Z, send: Control+3, when: has_menu}
+    - {accept: Shift+W, send: Control+4, when: has_menu}
+    - {accept: Shift+S, send: Control+5, when: has_menu}
+    - {accept: Shift+X, send: Control+6, when: has_menu}
+    - {accept: Shift+E, send: Control+7, when: has_menu}
+    - {accept: Shift+D, send: Control+8, when: has_menu}
+    # - {accept: Shift+Q, send: Control+1, when: has_menu}
+    # - {accept: Shift+A, send: Control+2, when: has_menu}
+    # - {accept: Shift+W, send: Control+3, when: has_menu}
+    # - {accept: Shift+S, send: Control+4, when: has_menu}
+    # - {accept: Shift+X, send: Control+5, when: has_menu}
+    # - {accept: Shift+E, send: Control+6, when: has_menu}
+    # - {accept: Shift+D, send: Control+7, when: has_menu}
+    # - {accept: Shift+C, send: Control+8, when: has_menu}
 #右邊選字（「Control+」不要換成「KP_」，特殊功能集【數字】選字會有問題）
     - {accept: Shift+Y, send: Control+1, when: has_menu}
     - {accept: Shift+H, send: Control+2, when: has_menu}
@@ -376,19 +376,19 @@ key_binder_plus:
 #     - {accept: Shift+L, send: Control+Shift+Return, when: composing}
 # ### 刪除鍵 ###
 # ### 另設快捷刪除鍵 ###
-#     # - {accept: Shift+X, send: BackSpace, when: composing}
-#     - {accept: Shift+C, send: BackSpace, when: composing}
+#     - {accept: Shift+X, send: BackSpace, when: composing}
+#     # - {accept: Shift+C, send: BackSpace, when: composing}
 #     - {accept: Shift+M, send: BackSpace, when: composing}
-#     # - {accept: Shift+Z, send: Delete, when: composing}
-#     - {accept: Shift+X, send: Delete, when: composing}
+#     - {accept: Shift+Z, send: Delete, when: composing}
+#     # - {accept: Shift+X, send: Delete, when: composing}
 #     - {accept: Shift+N, send: Delete, when: composing}
 #     - {accept: Shift+G, send: Escape, when: composing}
 # ### 另設快捷鍵 ###
 #     - {accept: Shift+V, send: Home, when: composing}
 #     - {accept: Shift+B, send: End, when: composing}
 # #其他快捷鍵翻頁
-#     # - {accept: Shift+C, send: Page_Up, when: has_menu}
-#     - {accept: Shift+Z, send: Page_Up, when: has_menu}
+#     - {accept: Shift+C, send: Page_Up, when: has_menu}
+#     # - {accept: Shift+Z, send: Page_Up, when: has_menu}
 #     - {accept: Shift+space, send: Page_Down, when: has_menu} #選字時「Shift」+「空白鍵」翻頁。 #send: Right #send: Down
 #     # - {accept: Shift+O, send: Page_Up, when: has_menu}
 #     # - {accept: Shift+P, send: Page_Down, when: has_menu}
@@ -1453,4 +1453,162 @@ preedit_p_3:
     ## 以上英文數字符號不先轉成最終顯示，方便下面作轉換。
     - "xlit|ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghij|ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ₁₂³⁴₅⁶⁷₈₉₀,.⸝-;⸋˺˹⁼'|"
     - 'xform/\\/⁞/'
-    - 'xform/　([ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄧㄨㄩㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦ])/⁞$1/'
+    #防不換行時，第一個注音不顯示？# - 'xform/　([ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄧㄨㄩㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦ])/⁞$1/'
+
+
+preedit_pa_1_2_4:
+### Paragraph Alignment 樣式 ###
+    - xform|,|a@|
+    - xform|[.]|b@|
+    - xform|/|c@|
+    - xform|-|d@|
+    - xform|;|e@|
+    - xform| |f@|
+    - xform/1/g@/
+    - xform/2/h@/
+    - xform/3/i@/
+    - xform/4/j@/
+    - xform/5/k@/
+    - xform/6/l@/
+    - xform/7/m@/
+    - xform/8/n@/
+    - xform/9/p@/
+    - xform/0/q@/
+    - xform/^([a-z@\\]+)$/\U$1\E　\n$1/
+    - xform/a@/ㄝ/
+    - xform/b@/ㄡ/
+    - xform/c@/ㄥ/
+    - xform/d@/ㄦ/
+    - xform/e@/ㄤ/
+    - xform/f@/ˉ /
+    - xform/g@/ㄅ/
+    - xform/h@/ㄉ/
+    - xform/i@/ˇ/
+    - xform/j@/ˋ /
+    - xform/k@/ㄓ/
+    - xform/l@/ˊ /
+    - xform/m@/˙ /
+    - xform/n@/ㄚ/
+    - xform/p@/ㄞ/
+    - xform/q@/ㄢ/
+    - "xlit|qazwsxedcrfvtgbyhnujmikolp|ㄆㄇㄈㄊㄋㄌㄍㄎㄏㄐㄑㄒㄔㄕㄖㄗㄘㄙㄧㄨㄩㄛㄜㄟㄠㄣ|"
+    - xform|A@|a|
+    - xform|B@|b|
+    - xform|C@|c|
+    - xform|D@|d|
+    - xform|E@|e|
+    - xform|F@|f| #ˉ拉
+    - xform/G@/1/
+    - xform/H@/2/
+    - xform/I@/3/ #3ˇ
+    - xform/J@/4/ #4ˋ
+    - xform/K@/5/
+    - xform/L@/6/ #6ˊ日
+    - xform/M@/7/ #7˙韓
+    - xform/N@/8/
+    - xform/P@/9/
+    - xform/Q@/0/
+    - xform/([0-9A-Zabcdef])\\/$1⁞/ #只限定英文分節 #　 ⁝⁞︙𝄄𖡡׀᰻|𝄀¦┆‖
+    ## 以上英文數字符號不先轉成最終顯示，方便下面作轉換。
+    ## 以下為一般斜線
+    # - xform|c| /  | #等略寬# #「\u2008」 是標點符號的寬度
+    # - xform|c| /  | #略寬# #「1/2」em=「1」en_space；「1/3」+「1/4」+「1/6」=9/12em=3/4em
+    ## 以下為分數斜號
+    - xform|c|  ⁄ | #等略寬#  #「?」+「1/6」+「?」
+    # - xform|c| ⁄ | #略寬# #「1」em
+    # - xform|c|  ⁄ | #略寬# #「1」em
+    # - xform|c|  ⁄ | #略窄# #「1/4」+「1/6」+「1/2」=「11/12」em
+    # - xform|c|  ⁄  | #略窄# #「1/6」+「?」+「?」+「1/4」=「5/12」+「2?」em
+    # - xform|c|  ⁄  | #略寬# #「?」+「1/4」+「1/4」+「?」=「1/2」+「2?」em
+    - "xlit|ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abdef|ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ１２³⁴５⁶⁷８９０，．－；⸋|"
+    - 'xform/\\/⁞/' #全形空格　 #半形空格  #| #⁞ #⁝ #⋮ #¦ #┆
+
+
+preedit_pa_3:
+### Paragraph Alignment 樣式 ###
+    - xform|,|a@|
+    - xform|[.]|b@|
+    - xform|/|c@|
+    - xform|-|d@|
+    - xform|;|e@|
+    - xform| |f@|
+    - xform/1/g@/
+    - xform/2/h@/
+    - xform/3/i@/
+    - xform/4/j@/
+    - xform/5/k@/
+    - xform/6/l@/
+    - xform/7/m@/
+    - xform/8/n@/
+    - xform/9/p@/
+    - xform/0/q@/
+    - xform|[]]|`````|
+    - xform|[[]|````|
+    - xform|=|```|
+    - xform|'|``|
+    - xform/^([a-z@`\\]+)$/\U$1\E　\n$1/
+    - xform/a@/ㄝ/
+    - xform/b@/ㄡ/
+    - xform/c@/ㄥ/
+    - xform/d@/ㄦ/
+    - xform/e@/ㄤ/
+    - xform/f@/ˉ /
+    - xform/g@/ㄅ/
+    - xform/h@/ㄉ/
+    - xform/i@/ˇ/
+    - xform/j@/ˋ /
+    - xform/k@/ㄓ/
+    - xform/l@/ˊ /
+    - xform/m@/˙ /
+    - xform/n@/ㄚ/
+    - xform/p@/ㄞ/
+    - xform/q@/ㄢ/
+    - "xlit|qazwsxedcrfvtgbyhnujmikolp|ㄆㄇㄈㄊㄋㄌㄍㄎㄏㄐㄑㄒㄔㄕㄖㄗㄘㄙㄧㄨㄩㄛㄜㄟㄠㄣ|"
+    - xform|A@|a|
+    - xform|B@|b|
+    - xform|C@|c|
+    - xform|D@|d|
+    - xform|E@|e|
+    - xform|F@|f|
+    - xform/G@/1/
+    - xform/H@/2/
+    - xform/I@/3/ #3ˇ
+    - xform/J@/4/ #4ˋ
+    - xform/K@/5/
+    - xform/L@/6/ #6ˊ
+    - xform/M@/7/ #7˙
+    - xform/N@/8/
+    - xform/P@/9/
+    - xform/Q@/0/
+    - xform|`````|g| #]韓
+    - xform|````|h| #[日
+    - xform|```|i| #=
+    - xform|``|j| #'拉
+    - xform/([0-9A-Zabcdefghij])\\/$1⁞/ #只限定英文分節 #　 ⁝⁞︙𝄄𖡡׀᰻|𝄀¦┆‖
+    ## 以上英文數字符號不先轉成最終顯示，方便下面作轉換。
+    ## 以下為一般斜線
+    # - xform|c| /  | #等略寬# #「\u2008」 是標點符號的寬度
+    # - xform|c| /  | #略寬# #「1/2」em=「1」en_space；「1/3」+「1/4」+「1/6」=9/12em=3/4em
+    ## 以下為分數斜號
+    - xform|c|  ⁄ | #等略寬#  #「?」+「1/6」+「?」
+    # - xform|c| ⁄ | #略寬# #「1」em
+    # - xform|c|  ⁄ | #略寬# #「1」em
+    # - xform|c|  ⁄ | #略窄# #「1/4」+「1/6」+「1/2」=「11/12」em
+    # - xform|c|  ⁄  | #略窄# #「1/6」+「?」+「?」+「1/4」=「5/12」+「2?」em
+    # - xform|c|  ⁄  | #略寬# #「?」+「1/4」+「1/4」+「?」=「1/2」+「2?」em
+    - "xlit|ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abdefghij|ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ１２³⁴５⁶⁷８９０，．－；⸋˺˹⁼'|"
+    - 'xform/\\/⁞/' #全形空格　 #半形空格  #| #⁞ #⁝ #⋮ #¦ #┆
+    #防不換行時，第一個注音不顯示？# - 'xform/　([ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄧㄨㄩㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦ])/⁞$1/'
+
+
+#### 以下「空格」調整上下排（英文和注音）對齊用 ####
+##  「 」：\u0020 一般打字輸入空格，（不與en space同寬）
+##  「 」：\u2002 是1/2 em（en space）
+##  「 」：\u2003 是1 em（em space）
+##  「 」：\u2004 是1/3 em
+##  「 」：\u2005 是1/4 em
+##  「 」：\u2006 是1/6 em
+##  「 」：\u2007 是圖形空間的寬度（用於分隔數字之定位符，與單一數字同寬）
+##  「 」：\u2008 是標點符號的寬度（與同字型之窄標點同寬，即句號或逗號（西方語文）之寬度）
+##  「　」：\u3000 是全形文字的寬度（表意文字空格，與CJK文字同寬）
+
