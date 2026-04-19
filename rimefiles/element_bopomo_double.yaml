@@ -96,7 +96,7 @@ key_binder:
 
 
 editor:
-#    space: commit_composition #使用 fluency_editor 時開啟(直接上屏)
+#    space: confirm #commit_composition #使用 fluency_editor 時開啟(直接上屏)
 #    space: toggle_selection #使用 fluency_editor 時開啟(不直接上屏)
     # Return: confirm #使用 express_editor 時開啟 #commit_composition
     # KP_Enter: confirm #使用 express_editor 時開啟 #commit_composition
@@ -281,6 +281,7 @@ algebra:
     - xform/^bx$/rl!/ #【肉類／肉品】
     - xform/^bq$/rp!/ #【肉品／肉類】
     - xform/^dv$/kx!/ #【科學】
+    - xform/^wj$/tu!/ #【跳舞】
     - xform/^t5$/vw!/ #【船隻】
     - xform/^cc$/hh!/ #【花卉】
     - xform/^gh$/ac!/ #【蔬菜】
@@ -403,6 +404,8 @@ algebra:
     - xform/^mv$/yx!/ #【圓形】
     - xform/^nr$/sj!/ #【三角】
     - xform/^2e$/dg!/ #【打勾】
+    - xform/^d1$/kb!/ #【空白／空格】
+    - xform/^de$/kg!/ #【空格／空白】
     - xform/^bm$/ry!/ #【日用／日用品】/
     - xform/^vu$/xi!/ #【血液／血型圖】/
     - xform/^fe$/qg!/ #【器官】/
@@ -611,6 +614,7 @@ preedit_format:
     - xform/^rl$/【肉類／肉品】/
     - xform/^rp$/【肉品／肉類】/
     - xform/^kx$/【科學】/
+    - xform/^tu$/【跳舞】/
     - xform/^vw$/【船隻】/
     - xform/^hh$/【花卉】/
     - xform/^ac$/【蔬菜】/
@@ -733,6 +737,8 @@ preedit_format:
     - xform/^yx$/【圓形】/
     - xform/^sj$/【三角】/
     - xform/^dg$/【打勾】/
+    - xform/^kb$/【空白／空格】/
+    - xform/^kg$/【空格／空白】/
     - xform/^ry$/【日用／日用品】/
     - xform/^xi$/【血液／血型圖】/
     - xform/^qg$/【器官】/
