@@ -241,7 +241,7 @@ menu:
 speller:
   alphabet: "abcdefghijklmnopqrstuvwxyz-;',./`"
   initials: "abcdefghijklmnopqrstuvwxyz-"
-  finals: ";',./`"
+  # finals: ";',./`" #不能開啟，否則組合字符無法輸入！
   delimiter: "|"
   algebra:
     - derive/^(-)[`']$/$1/
