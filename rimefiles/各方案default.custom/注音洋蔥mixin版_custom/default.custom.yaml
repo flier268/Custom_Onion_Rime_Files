@@ -7,6 +7,7 @@
 patch:
   schema_list:
 ######## 洋蔥注音 mix‧in 版 ########
+    - schema: bo_mixin5
     - schema: bo_mixin1
     - schema: bo_mixin2
     - schema: bo_mixin3
@@ -106,4 +107,3 @@ patch:
 #    Eisu_toggle: clear
 #    Control_L: noop
 #    Control_R: noop
-

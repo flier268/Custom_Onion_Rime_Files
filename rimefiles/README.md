@@ -34,6 +34,9 @@
 ├── bo_mixin2.schema.yaml                      〈注音 mixin 2 方案〉「設定檔」
 ├── bo_mixin3.schema.yaml                      〈注音 mixin 3 方案〉「設定檔」
 ├── bo_mixin4.schema.yaml                      〈注音 mixin 4 方案〉「設定檔」
+├── bo_mixin5.extended.dict.yaml               〈注音 mixin 5 中英混打方案〉「主字詞典」
+├── bo_mixin5.README.md                        〈注音 mixin 5 中英混打方案〉「簡單教學」
+├── bo_mixin5.schema.yaml                      〈注音 mixin 5 中英混打方案〉「設定檔」
 ├── bo_mixin_en.dict.yaml                      〈注音 mixin 系列方案〉「字典」：純26個英文字母+簡單標點。
 ├── bo_mixin_jp.dict.yaml                      〈注音 mixin 系列方案〉「字典」：日文假名。
 ├── bo_mixin_kr.dict.yaml                      〈注音 mixin 系列方案〉「字典」：韓文 形碼 鍵位。

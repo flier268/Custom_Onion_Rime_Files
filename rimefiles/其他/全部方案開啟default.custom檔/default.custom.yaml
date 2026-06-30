@@ -7,6 +7,7 @@
 patch:
   schema_list:
 ######## 洋蔥全部方案（除形碼方案關閉） ########
+    - schema: bo_mixin5
     - schema: bo_mixin4
     - schema: bo_mixin1
     - schema: bo_mixin2
@@ -138,4 +139,3 @@ patch:
 #    Eisu_toggle: clear
 #    Control_L: noop
 #    Control_R: noop
-

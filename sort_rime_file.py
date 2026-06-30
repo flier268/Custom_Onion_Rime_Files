@@ -166,7 +166,10 @@ shutil.copyfile("./rimefiles/bo_mixin_en.dict.yaml", "./"+sort_rime+"/"+rime_fil
 shutil.copyfile("./rimefiles/bo_mixin_phrase.txt", "./"+sort_rime+"/"+rime_files_3+"/bo_mixin_phrase.txt")
 shutil.copyfile("./rimefiles/lua_custom_phrase.txt", "./"+sort_rime+"/"+rime_files_3+"/lua_custom_phrase.txt")
 shutil.copyfile("./rimefiles/bo_mixin.extended.dict.yaml", "./"+sort_rime+"/"+rime_files_3+"/bo_mixin.extended.dict.yaml")
+shutil.copyfile("./rimefiles/bo_mixin5.extended.dict.yaml", "./"+sort_rime+"/"+rime_files_3+"/bo_mixin5.extended.dict.yaml")
+shutil.copyfile("./rimefiles/bo_mixin5.README.md", "./"+sort_rime+"/"+rime_files_3+"/bo_mixin5.README.md")
 shutil.copyfile("./rimefiles/bo_mixin1.schema.yaml", "./"+sort_rime+"/"+rime_files_3+"/bo_mixin1.schema.yaml")
+shutil.copyfile("./rimefiles/bo_mixin5.schema.yaml", "./"+sort_rime+"/"+rime_files_3+"/bo_mixin5.schema.yaml")
 shutil.copyfile("./rimefiles/bo_mixin2.schema.yaml", "./"+sort_rime+"/"+rime_files_3+"/bo_mixin2.schema.yaml")
 shutil.copyfile("./rimefiles/bo_mixin3.schema.yaml", "./"+sort_rime+"/"+rime_files_3+"/bo_mixin3.schema.yaml")
 shutil.copyfile("./rimefiles/bo_mixin4.schema.yaml", "./"+sort_rime+"/"+rime_files_3+"/bo_mixin4.schema.yaml")
@@ -654,6 +657,3 @@ os.rename("./"+sort_rime+"/"+rime_files_9+"/", "./"+sort_rime+"/"+rime_files_9+"
 os.rename("./"+sort_rime+"/"+rime_files_10+"/", "./"+sort_rime+"/"+rime_files_10+"_"+localtime)
 
 os.rename("./"+sort_rime+"/", "./"+the_name+"_"+localtime)
-
-
-
