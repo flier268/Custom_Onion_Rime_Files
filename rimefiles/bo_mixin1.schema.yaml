@@ -136,6 +136,7 @@ engine:
     - table_translator@emoji_series
     - table_translator@easy_en
     - table_translator@easy_en_upper
+    - table_translator@easy_en_direct
     # - script_translator@easy_en_script
     - script_translator@japan
     - script_translator@cyr2
@@ -518,6 +519,16 @@ e_reverse_lookup:
     # - xform|^[ a-z;/.'-]+|| #easy_en_super用
     - xform/@@/\n          /
     - xform/@/ /
+
+easy_en_direct:
+  tag: abc
+  dictionary: easy_en_lower
+  enable_sentence: false
+  enable_completion: true
+  enable_user_dict: false
+  initial_quality: -1
+  comment_format:
+    - xform/.+//
 ################################『日語假名輸入漢字』##################################
 japan:
   tag: japan
@@ -700,6 +711,12 @@ emoji_series:
 ################################### 符號處理 ######################################
 punctuator:
   import_preset: punct_bopomo
+################################ 中英切換 ###################################
+ascii_composer:
+  switch_key:
+    Shift_L: inline_ascii
+    Shift_R: commit_code
+    Caps_Lock: noop
 ################################ 按鍵處理 ###################################
 key_binder:
   import_preset: default
