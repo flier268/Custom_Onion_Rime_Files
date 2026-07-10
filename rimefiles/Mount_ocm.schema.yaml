@@ -95,7 +95,7 @@ speller:
   # auto_clear: max_length # auto：空碼自動清屏| manual：空碼按下一鍵確認清屏| max_length：達到最長碼時確認清屏
   algebra:
 ### 「vrsf」標註轉寫 ###
-    - xform/`$//
+    - xform/`//
 ### 用「`」調出中文漢字（《自造詞》可用） ###
     - derive/^([a-z]+)$/$1`/
 
@@ -118,10 +118,10 @@ tr_reverse_lookup:
   overwrite_comment: true
   dictionary: Mount_ocm.extended
   comment_format:
+    - xform/`([a-z])/‹$1›/ #「vrsf」標註轉寫
+    - "xlit|abcdefghijklmnopqrstuvwxyz|ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ|"
     - xform/ /  /
     - xform/^/  /
-    - xform/([a-z])`/‹$1›/ #「vrsf」標註轉寫
-    - "xlit|abcdefghijklmnopqrstuvwxyz|ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ|"
 
 pt:
   tag: pt
@@ -141,9 +141,11 @@ tr2_reverse_lookup:
   overwrite_comment: true
   dictionary: punct_ovff
   comment_format:
+    - xform/`([a-z])/‹$1›/ #「vrsf」標註轉寫
+    - "xlit|abcdefghijklmnopqrstuvwxyz|ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ|"
     - xform/ /   /
     - xform/^/  /
-    - "xlit|abcdefghijklmnopqrstuvwxyz|ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ|"
+    - xform/$/  /
 
 reverse2_lookup:
   tag: reverse2_lookup
@@ -157,19 +159,19 @@ reverse2_lookup:
   closing_tips: "◀《注音反查》"
   preedit_format:
     - "xlit|1qaz2wsxedcrfv5tgbyhnujm8ik,9ol.0p;/- 6347|ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄧㄨㄩㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦˉˊˇˋ˙|"
-    - xform/^/《注音反查》/
     - xform/\|/  /
     - xform/`/  /
+    - xform/^/《注音反查》/
 
 ovff_reverse_lookup:
   tags: [ reverse2_lookup ]
   overwrite_comment: true
   dictionary: Mount_ocm.extended
   comment_format:
+    - xform/`([a-z])/‹$1›/ #「vrsf」標註轉寫
+    - "xlit|abcdefghijklmnopqrstuvwxyz|ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ|"
     - xform/ /  /
     - xform/^/  /
-    - xform/([a-z])`/‹$1›/ #「vrsf」標註轉寫
-    - "xlit|abcdefghijklmnopqrstuvwxyz|ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ|"
 
 reverse3_lookup:
   # __include: /translator  # user_dict 詞彙會混到 abc 中，有可能不顯示，也可能顯示影響。
@@ -190,10 +192,10 @@ reverse3_lookup:
   extra_tags:
     - reverse3_lookup_extra
   preedit_format:
-    - xform/^/《查注音》/
     - "xlit|abcdefghijklmnopqrstuvwxyz|ABCDEFGHIJKLMNOPQRSTUVWXYZ|"
     - xform/\|/  /
     - xform/`/  /
+    - xform/^/《查注音》/
 
 reverse3_lookup_extra:
   # __include: /translator  # user_dict 詞彙會混到 abc 中，有可能不顯示，也可能顯示影響。
@@ -209,10 +211,10 @@ reverse3_lookup_extra:
   # strict_spelling: false #true
   initial_quality: 1
   preedit_format:
-    - xform/^/《查注音》/
     - "xlit|abcdefghijklmnopqrstuvwxyz|ABCDEFGHIJKLMNOPQRSTUVWXYZ|"
     - xform/\|/  /
     - xform/`/  /
+    - xform/^/《查注音》/
 
 phonetic_reverse_lookup:
   tags: [ reverse3_lookup ]
@@ -243,8 +245,8 @@ phonetic_reverse_lookup:
     - xform/eh/E/
     - xform/([iv])e/$1E/
     - "xlit|bpmfdtnlgkhjqxZCSrzcsiuvaoeEAIOUMNKGR12345|ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄧㄨㄩㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦˉˊˇˋ˙|"
-    - xform/^/ /
     - xform/ /  /
+    - xform/^/  /
 
 emoji_series:
   tag: emoji_series
