@@ -6,7 +6,7 @@
 
 ### Version Info
 
-- librime 1.17.0 (417db23)
+- librime 1.17.0 (13faefe)
 
 - librime-lua #409 (ec52e48)
 
