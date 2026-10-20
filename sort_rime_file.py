@@ -17,7 +17,7 @@ rime_files_7=rime_ocm_folder+"/ocm_plus"
 rime_files_8=rime_ocm_folder+"/ocm_mixin"
 rime_files_9="洋蔥行列30"
 rime_files_10="洋蔥行列10"
-the_name="電腦RIME方案"
+the_name="洋蔥電腦RIME方案"
 
 
 #※新增資料夾(多層目錄, 如前一層data資料夾不存在, 將自動新增)※
@@ -268,6 +268,8 @@ shutil.copyfile("./rimefiles/essay-zh-hant-mc.txt", "./"+sort_rime+"/"+rime_file
 shutil.copyfile("./rimefiles/bopomo_onion_double.extended.dict.yaml", "./"+sort_rime+"/"+rime_files_4+"/bopomo_onion_double.extended.dict.yaml")
 shutil.copyfile("./rimefiles/bopomo_onion_double.schema.yaml", "./"+sort_rime+"/"+rime_files_4+"/bopomo_onion_double.schema.yaml")
 shutil.copyfile("./rimefiles/bopomo_onion_double_t2.schema.yaml", "./"+sort_rime+"/"+rime_files_4+"/bopomo_onion_double_t2.schema.yaml")
+shutil.copyfile("./rimefiles/bopomo_onion_double_s1.schema.yaml", "./"+sort_rime+"/"+rime_files_4+"/bopomo_onion_double_s1.schema.yaml")
+shutil.copyfile("./rimefiles/bopomo_onion_double_s1_t2.schema.yaml", "./"+sort_rime+"/"+rime_files_4+"/bopomo_onion_double_s1_t2.schema.yaml")
 shutil.copyfile("./rimefiles/bopomo_onion_double_phrase.txt", "./"+sort_rime+"/"+rime_files_4+"/bopomo_onion_double_phrase.txt")
 shutil.copyfile("./rimefiles/cangjie5.dict.yaml", "./"+sort_rime+"/"+rime_files_4+"/cangjie5.dict.yaml")
 shutil.copyfile("./rimefiles/cangjie5.schema.yaml", "./"+sort_rime+"/"+rime_files_4+"/cangjie5.schema.yaml")

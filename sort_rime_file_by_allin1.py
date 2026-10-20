@@ -6,8 +6,8 @@ import time
 
 #名稱(取出來較好變換)
 sort_rime="sort_rime_allx9"
-rime_files="rime＜allin1＞"
-the_name="電腦RIME方案＜allin1＞"
+rime_files="OnionRime＜allin1＞"
+the_name="洋蔥電腦RIME方案＜allin1＞"
 
 
 #※新增資料夾(多層目錄, 如前一層data資料夾不存在, 將自動新增)※
@@ -152,6 +152,8 @@ shutil.copytree("./rimefiles/custom檔_注音mixin版兩行同顯/", "./"+sort_r
 shutil.copyfile("./rimefiles/bopomo_onion_double.extended.dict.yaml", "./"+sort_rime+"/"+rime_files+"/bopomo_onion_double.extended.dict.yaml")
 shutil.copyfile("./rimefiles/bopomo_onion_double.schema.yaml", "./"+sort_rime+"/"+rime_files+"/bopomo_onion_double.schema.yaml")
 shutil.copyfile("./rimefiles/bopomo_onion_double_t2.schema.yaml", "./"+sort_rime+"/"+rime_files+"/bopomo_onion_double_t2.schema.yaml")
+shutil.copyfile("./rimefiles/bopomo_onion_double_s1.schema.yaml", "./"+sort_rime+"/"+rime_files+"/bopomo_onion_double_s1.schema.yaml")
+shutil.copyfile("./rimefiles/bopomo_onion_double_s1_t2.schema.yaml", "./"+sort_rime+"/"+rime_files+"/bopomo_onion_double_s1_t2.schema.yaml")
 shutil.copyfile("./rimefiles/bopomo_onion_double_phrase.txt", "./"+sort_rime+"/"+rime_files+"/bopomo_onion_double_phrase.txt")
 shutil.copyfile("./rimefiles/symbols_bpmf_double.schema.yaml", "./"+sort_rime+"/"+rime_files+"/symbols_bpmf_double.schema.yaml")
 shutil.copyfile("./rimefiles/element_bopomo_double.yaml", "./"+sort_rime+"/"+rime_files+"/element_bopomo_double.yaml")

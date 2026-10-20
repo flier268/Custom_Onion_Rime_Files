@@ -1,4 +1,4 @@
-# 電腦 Rime 洋蔥方案（注音、雙拼、拼音）
+# 洋蔥電腦 Rime 方案（注音、雙拼、拼音）
 
 ####  ※ 請勿使用於商業營利相關行為
 ####  ※ Commercial use is prohibited
@@ -75,18 +75,24 @@
 
   > Rime 架構下，怎麼設置皆無法相同一般電腦注音（如：微軟新注音），一些功能和操作無法照搬！
 
+- Rime 架構下，任何方案，皆不建議打「大長句」！建議以「詞」（七字以下）為邏輯去頻繁上屏！
+
+  > 主因不在 Rime「大長句」組字的準確性！近期出現 AI 校正「大長句」的輸入法，其 AI 校正理論應可導入 Rime 方案中，即使如此還是不建議打「大長句」！
+
+  > 重點在遇到錯誤時的「切分選字詞」！Rime 於輸入組字有誤時，需「從頭」選，無法只從有錯誤「字詞」去更正，[相關說明](https://github.com/oniondelta/Onion_Rime_Files/wiki/%E3%80%8E-%E6%B3%A8%E9%9F%B3-%E6%B4%8B%E8%94%A5-%E7%B4%94%E6%B3%A8%E9%9F%B3-%E7%89%88-%E3%80%8F%E6%96%B9%E6%A1%88%E8%AA%AA%E6%98%8E#%E7%A2%BC%E5%AD%97%E9%82%8F%E8%BC%AF)。
+
+  > 習慣打長長一句（注音）在上屏，Rime 整個架構就不適合於您！
+
 - 為易更新，不用同一檔案更新數次，『rimefiles』裡文件不以方案區分。
 
   > 提供 sort_rime_file.py，把所需 Rime 文件放到各個方案資料夾。
 
-<!--## 下載方案（三擇一）-->
-## 下載方案
+## 下載方案（三擇一）
 
 - Download ZIP，使用 sort_rime_file.py 分類各方案。
 
-  > 本倉庫 Onion_Rime_Files 按右上綠色 〔↓Code〕 ⇨ Download ZIP ⇨ 解壓縮 ZIP 進入資料夾 ⇨ Python 執行 sort_rime_file.py ⇨ 產生『電腦RIME方案_{當天日期}』資料夾
+  > 本倉庫 Onion_Rime_Files 按右上綠色 〔↓Code〕 ⇨ Download ZIP ⇨ 解壓縮 ZIP 進入資料夾 ⇨ Python 執行 sort_rime_file.py ⇨ 產生『洋蔥電腦RIME方案_{當天日期}』資料夾
 
-<!--
 - 本倉庫 Releases 中，有分好方案之 ZIP 檔。
 
   > 不一定更到最新。
@@ -94,11 +100,10 @@
 - 本倉庫 Actions 中，其 sort_rime_output 裡 artifact 有已跑 sort_rime_file.py 分好方案之 ZIP 檔。
 
   > 不一定更到最新，需登錄 GitHub 帳號。
--->
 
 ## 安裝方案
 
-- 開啟『電腦RIME方案_{日期}』資料夾，各個方案所需文件，已放置於『方案名稱』資料夾。
+- 開啟『洋蔥電腦RIME方案_{日期}』資料夾，各個方案所需文件，已放置於『方案名稱』資料夾。
 
 - 選取欲使用方案，內含文件通通放入『Rime』用戶設定資料夾，如已有『opencc』資料夾，勿整個覆蓋，移動『opencc』裡面文件過去，無則整個『opencc』移過去。
 
@@ -215,7 +220,14 @@
 ## Keys
  
 - [注音（洋蔥 雙拼 版）鍵位](https://github.com/oniondelta/Onion_Rime_Files/wiki/%E3%80%8E-%E6%B3%A8%E9%9F%B3-%E6%B4%8B%E8%94%A5-%E9%9B%99%E6%8B%BC-%E7%89%88-%E3%80%8F%E6%96%B9%E6%A1%88%E8%AA%AA%E6%98%8E#%E9%8D%B5%E4%BD%8D%E5%9C%96%E7%A4%BA)
-  > 一般版可簡拼；T2 版（Type2）為一般雙拼每字須鍵兩碼（不能簡拼，但聲調可省略）
+
+  > 一般版可簡拼
+
+  > T2 版（Type2）為一般雙拼每字須鍵兩碼（不能簡拼，但聲調可省略）
+
+  > S1 版（Space1）為「空白鍵」輸入聲調「一聲」、「 ; 」輸入聲調「四聲」
+
+  > S1 T2 版為上方兩者變動合併
 
   #### <img src="https://raw.githubusercontent.com/oniondelta/Onion_Rime_Files/main/rimefiles/%E9%9B%99%E6%8B%BC%E6%B3%A8%E9%9F%B3%E9%8D%B5%E4%BD%8D%E8%AA%AA%E6%98%8E%E5%9C%96%E7%A4%BA/%E6%B3%A8%E9%9F%B3%E6%B4%8B%E8%94%A5%E9%9B%99%E6%8B%BC%E8%AA%AA%E6%98%8E.png" width = "595" alt="image" /><br>
 
